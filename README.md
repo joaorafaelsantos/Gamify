@@ -1,2 +1,2 @@
-# gamificationws
+# Gamify
 Gamification Web Service
