@@ -8,7 +8,7 @@ public interface InterfaceUser {
 	public void createUser(String username, String password, String email);
 	public List<User> getUsers();
 	public User getUser(String username);
-	public User changeUser(String username, User oldUser, User newUser);
+	public void changeUser(String username, User oldUser, User newUser);
 	public void removeUser(String username);
 
 }
