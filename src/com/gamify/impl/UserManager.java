@@ -28,9 +28,14 @@ public class UserManager implements InterfaceUser {
 
 	@Override
 	public List<User> getUsers() {
-		return users;
+		List<User> filteredUsers = new ArrayList<User>();
+		for(User user:users) {
+		    User fu = new User(user.getUsername(), user.getEmail());
+		    filteredUsers.add(fu);
+		}
+		return filteredUsers;
 	}
-
+	
 	@Override
 	public User getUser(String username) {
 		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {

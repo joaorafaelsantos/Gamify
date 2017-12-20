@@ -1,6 +1,7 @@
 package com.gamify.interf;
 
 import java.util.List;
+
 import com.gamify.model.User;
 
 public interface InterfaceUser {
