@@ -1,14 +1,20 @@
 package com.gamify.interf;
 
-public interface InterfaceAchievement {
+import java.util.List;
 
+import com.gamify.model.Achievement;
+import com.gamify.model.App;
+
+public interface InterfaceAchievement {
+	
+	public Achievement getAchievement(String idAchievement);
+	public List<Achievement> getAchievements();
+	public void createAchievement(String idAchivement, App idApp, String name, String structure, String goal, String type,String description);
+	public void removeAchievement(String idAchievement);
+	
 }
 
-//package com.gamify.impl;
-//
-//import java.util.List;
-//
-//import com.gamify.model.Game;
+
 //
 //public interface iGame {
 //	

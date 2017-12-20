@@ -1,20 +1,63 @@
 package com.gamify.impl;
 
-public class AchievementManager {
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-	public AchievementManager() {
-		// TODO Auto-generated constructor stub
+import com.gamify.interf.InterfaceAchievement;
+import com.gamify.model.Achievement;
+import com.gamify.model.App;
+
+public class AchievementManager implements InterfaceAchievement {
+
+	static List<Achievement> achievements = new ArrayList<Achievement>();
+	
+	
+// Encher o ArrayList
+//  static AchievementManager am = null;
+//	
+//	public static AchievementManager getInstance() {
+//		if(am == null) {
+//			am = new GameManager();
+//			Game g1 = new Game("Fifa", "EASPORTS", 2017, "Sport");
+//			games.add(g1);
+//		}
+//		return am;
+//	}
+	
+	public Achievement getAchievement(String idAchievement) {
+		
+		for (Iterator<Achievement> iterator = achievements.iterator(); iterator.hasNext();) {
+			Achievement achievement = (Achievement) iterator.next();
+			if(achievement.getIdAchivement().equals(idAchievement))
+				return achievement;
+	}
+		
+		return null;
+	}
+	
+	
+	public void createAchievement(String idAchivement, App idApp, String name, String structure, String goal, String type,String description) {
+		Achievement a = new Achievement(idAchivement,idApp,name,structure,goal,type,description);
+		achievements.add(a);		
+	}
+	
+	public List<Achievement> getAchievements() {
+		return achievements;
+	}
+	
+	
+	public void removeAchievement(String idAchievement) {
+		for (Iterator<Achievement> iterator = achievements.iterator(); iterator.hasNext();) {
+			Achievement achievement = (Achievement) iterator.next();
+			if(achievement.getIdAchivement().equals(idAchievement))
+				iterator.remove();
+		}
 	}
 
 }
 
-//package com.gamify.impl;
-//
-//import java.util.ArrayList;
-//import java.util.Iterator;
-//import java.util.List;
-//
-//import com.gamify.model.Game;
+
 //
 //public class GameManager implements iGame{
 //
@@ -40,31 +83,7 @@ public class AchievementManager {
 //	}
 //
 //	
-//	public List<Game> getGames() {
-//		return games;
-//	}
 //
-//	public void createGame(String title, String company, int year, String category) {
-//		Game g = new Game(title, company, year, category);
-//		games.add(g);		
-//	}
-//
-//	public Game getGame(String title) {
-//		for (Iterator<Game> iterator = games.iterator(); iterator.hasNext();) {
-//			Game game = (Game) iterator.next();
-//			if(game.getTitle().equals(title))
-//				return game;
-//		}
-//		return null;
-//	}
-//
-//	public void removeGame(String title) {
-//		for (Iterator<Game> iterator = games.iterator(); iterator.hasNext();) {
-//			Game game = (Game) iterator.next();
-//			if(game.getTitle().equals(title))
-//				iterator.remove();
-//		}
-//	}
 //
 //	public List<Game> getGames(String category) {
 //		List<Game> filteredGames = new ArrayList<Game>();
