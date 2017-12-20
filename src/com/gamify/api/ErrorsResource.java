@@ -38,8 +38,9 @@ public class ErrorsResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Error getError(@PathParam("idError") String idError) {
 		
-		ErrorManager em = ErrorManager.getInstance();		
-		return em.getError(idError);
+		ErrorManager em = ErrorManager.getInstance();	
+		int parsedIdError = Integer.parseInt(idError);
+		return em.getError(parsedIdError);
 	}
 
 }
