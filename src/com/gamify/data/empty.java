@@ -1,8 +1,8 @@
 package com.gamify.data;
 
-public class Random {
+public class empty {
 
-	public Random() {
+	public empty() {
 		// TODO Auto-generated constructor stub
 	}
 

@@ -10,7 +10,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -21,55 +20,56 @@ import com.gamify.impl.AppManager;
 import com.gamify.model.App;
 import com.gamify.model.User;
 
-@Path("/app")
+@Path("/apps")
 public class AppsResource {
-	
+
 	// Create new app
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
 	public Response createApp(
 			@FormParam("idApp") String idApp,
-			@FormParam("username") User username,
 			@FormParam("appName") String appName,
 			@FormParam("type") String type,
 			@FormParam("description") String description,
 			@Context UriInfo uriInfo) {
-		
+
 		AppManager am = AppManager.getInstance();
-		am.createApp(idApp, username, appName, type, description);
-					
+		//User username = USER IDENTIFIER *TO DO* ...
+//		am.createApp(idApp, username, appName, type, description);
+
 		UriBuilder builder = uriInfo.getAbsolutePathBuilder();	
 		builder.path(idApp);
 		return Response.created(builder.build()).build();
 	}
 
+
 	// Get all apps
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<App> getApps() {
-		
+
 		AppManager am = AppManager.getInstance();		
 		return am.getApps();
 	}
-	
+
 	// GET a specific app
 	@Path("/{idApp}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public App getApp(@PathParam("idApp") String idApp) {
-		
+
 		AppManager am = AppManager.getInstance();		
 		return am.getApp(idApp);
 	}
-	
-	// DELETE a specific app
+
+	//DELETE a specific app
 	@Path("/{idApp}")
 	@DELETE	
 	public Response removeUser(@PathParam("idApp") String idApp) {
-		
+
 		AppManager am = AppManager.getInstance();		
 		am.removeApp(idApp);
-		
+
 		return Response.ok().entity("App removed!").build();
 	}
 

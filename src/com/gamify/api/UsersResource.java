@@ -10,7 +10,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -23,7 +22,7 @@ import com.gamify.model.User;
 @Path("/users")
 public class UsersResource {
 	
-	// Create new user
+	 //Create new user
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
 	public Response createUser(
@@ -59,7 +58,7 @@ public class UsersResource {
 		return um.getUser(username);
 	}
 	
-	// DELETE a specific user
+	 //DELETE a specific user
 	@Path("/{username}")
 	@DELETE	
 	public Response removeUser(@PathParam("username") String username) {
