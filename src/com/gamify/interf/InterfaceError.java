@@ -6,6 +6,6 @@ import com.gamify.model.Error;
 public interface InterfaceError {
 
 	public List<Error> getErrors();
-	public Error getError(int idError);
+	public Error getError(int errorID);
 	
 }

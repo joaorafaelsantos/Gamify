@@ -1,36 +1,36 @@
 package com.gamify.model;
 
 public class App {
-	
-	private String idApp;
-	private User username;
+
+	private String appID;
+	private User userID;
 	private String appName;
 	private String type;
 	private String description;
-	
-	public App(String idApp, User username, String appName, String type, String description) {
+
+	public App(String appID, User userID, String appName, String type, String description) {
 		super();
-		this.idApp = idApp;
-		this.username = username;
+		this.appID = appID;
+		this.userID = userID;
 		this.appName = appName;
 		this.type = type;
 		this.description = description;
 	}
 
-	public String getIdApp() {
-		return idApp;
+	public String getAppID() {
+		return appID;
 	}
 
-	public void setIdApp(String idApp) {
-		this.idApp = idApp;
+	public void setAppID(String appID) {
+		this.appID = appID;
 	}
 
-	public User getUsername() {
-		return username;
+	public String getUserID() {
+		return userID.getUserID();
 	}
 
-	public void setUsername(User username) {
-		this.username = username;
+	public void setUserID(User userID) {
+		this.userID = userID;
 	}
 
 	public String getAppName() {
@@ -56,11 +56,11 @@ public class App {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	
-	
-	
 
-	
+
+
+
+
+
 
 }

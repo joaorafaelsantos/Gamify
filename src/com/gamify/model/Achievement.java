@@ -2,8 +2,8 @@ package com.gamify.model;
 
 public class Achievement {
 
-	private String idAchivement;
-	private App idApp;
+	private String achievementID;
+	private App appID;
 	private String name;
 	private String structure;
 	private String goal;
@@ -14,11 +14,11 @@ public class Achievement {
 	
 	
 	
-	public Achievement(String idAchivement, App idApp, String name, String structure, String goal, String type,
+	public Achievement(String achievementID, App appID, String name, String structure, String goal, String type,
 			String description) {
 		super();
-		this.idAchivement = idAchivement;
-		this.idApp = idApp;
+		this.achievementID = achievementID;
+		this.appID = appID;
 		this.name = name;
 		this.structure = structure;
 		this.goal = goal;
@@ -27,17 +27,17 @@ public class Achievement {
 		this.inputs=null;
 	}
 	
-	public String getIdAchivement() {
-		return idAchivement;
+	public String getAchievementID() {
+		return achievementID;
 	}
-	public void setIdAchivement(String idAchivement) {
-		this.idAchivement = idAchivement;
+	public void setAchievementID(String achievementID) {
+		this.achievementID = achievementID;
 	}
-	public App getIdApp() {
-		return idApp;
+	public App getAppID() {
+		return appID;
 	}
-	public void setIdApp(App idApp) {
-		this.idApp = idApp;
+	public void setAppID(App appID) {
+		this.appID = appID;
 	}
 	public String getName() {
 		return name;

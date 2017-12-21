@@ -25,13 +25,13 @@ public class ErrorsResource {
 	}
 	
 	// GET a specific error
-	@Path("/{idError}")
+	@Path("/{errorID}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Error getError(@PathParam("idError") String idError) {
+	public Error getError(@PathParam("errorID") String errorID) {
 		ErrorManager em = ErrorManager.getInstance();	
-		int parsedIdError = Integer.parseInt(idError);
-		return em.getError(parsedIdError);
+		int parsedErrorID = Integer.parseInt(errorID);
+		return em.getError(parsedErrorID);
 	}
 
 }

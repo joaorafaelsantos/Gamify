@@ -21,21 +21,20 @@ import com.gamify.model.User;
 
 @Path("/users")
 public class UsersResource {
-	
-	 //Create new user
+	//Create new user
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
 	public Response createUser(
-			@FormParam("username") String username,
+			@FormParam("userID") String userID,
 			@FormParam("password") String password,
 			@FormParam("email") String email,
 			@Context UriInfo uriInfo) {
-		
+
 		UserManager gm = UserManager.getInstance();
-		gm.createUser(username, password, email);
-					
+		gm.createUser(userID, password, email);
+
 		UriBuilder builder = uriInfo.getAbsolutePathBuilder();	
-		builder.path(username);
+		builder.path(userID);
 		return Response.created(builder.build()).build();
 	}
 
@@ -43,29 +42,29 @@ public class UsersResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<User> getUsers() {
-		
+
 		UserManager um = UserManager.getInstance();		
 		return um.getUsers();
 	}
-	
+
 	// GET a specific user
-	@Path("/{username}")
+	@Path("/{userID}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public User getUser(@PathParam("username") String username) {
-		
+	public User getUser(@PathParam("userID") String userID) {
+
 		UserManager um = UserManager.getInstance();		
-		return um.getUser(username);
+		return um.getUser(userID);
 	}
-	
-	 //DELETE a specific user
-	@Path("/{username}")
+
+	//DELETE a specific user
+	@Path("/{userID}")
 	@DELETE	
-	public Response removeUser(@PathParam("username") String username) {
-		
+	public Response removeUser(@PathParam("userID") String userID) {
+
 		UserManager gm = UserManager.getInstance();		
-		gm.removeUser(username);
-		
+		gm.removeUser(userID);
+
 		return Response.ok().entity("User removed!").build();
 	}
 

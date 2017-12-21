@@ -20,25 +20,26 @@ import com.gamify.impl.AppManager;
 import com.gamify.model.App;
 import com.gamify.model.User;
 
-@Path("/apps")
+@Path("/users/{userID}/apps")
 public class AppsResource {
 
 	// Create new app
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
 	public Response createApp(
-			@FormParam("idApp") String idApp,
+			@FormParam("appID") String appID,
 			@FormParam("appName") String appName,
 			@FormParam("type") String type,
 			@FormParam("description") String description,
+			@PathParam("userID") String userID,
 			@Context UriInfo uriInfo) {
 
 		AppManager am = AppManager.getInstance();
-		//User username = USER IDENTIFIER *TO DO* ...
-//		am.createApp(idApp, username, appName, type, description);
+		//User userID = USER IDENTIFIER *TO DO* ...
+		//		am.createApp(appID, userID, appName, type, description);
 
 		UriBuilder builder = uriInfo.getAbsolutePathBuilder();	
-		builder.path(idApp);
+		builder.path(appID);
 		return Response.created(builder.build()).build();
 	}
 
@@ -46,29 +47,29 @@ public class AppsResource {
 	// Get all apps
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<App> getApps() {
+	public List<App> getApps(@PathParam("userID") String userID) {
 
 		AppManager am = AppManager.getInstance();		
-		return am.getApps();
+		return am.getApps(userID);
 	}
 
 	// GET a specific app
-	@Path("/{idApp}")
+	@Path("/{appID}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public App getApp(@PathParam("idApp") String idApp) {
+	public App getApp(@PathParam("userID") String userID, @PathParam("appID") String appID) {
 
 		AppManager am = AppManager.getInstance();		
-		return am.getApp(idApp);
+		return am.getApp(userID,appID);
 	}
 
 	//DELETE a specific app
-	@Path("/{idApp}")
+	@Path("/{appID}")
 	@DELETE	
-	public Response removeUser(@PathParam("idApp") String idApp) {
+	public Response removeUser(@PathParam("appID") String appID) {
 
 		AppManager am = AppManager.getInstance();		
-		am.removeApp(idApp);
+		am.removeApp(appID);
 
 		return Response.ok().entity("App removed!").build();
 	}

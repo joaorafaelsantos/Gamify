@@ -2,25 +2,25 @@ package com.gamify.model;
 
 public class Error {
 
-	private int idError;
+	private int errorID;
 	private String message;
 	private String link;
 	private int http_status;
 	
-	public Error(int idError, String message, String link, int http_status) {
+	public Error(int errorID, String message, String link, int http_status) {
 		super();
-		this.idError = idError;
+		this.errorID = errorID;
 		this.message = message;
 		this.link = link;
 		this.http_status = http_status;
 	}
 
-	public int getIdError() {
-		return idError;
+	public int getErrorID() {
+		return errorID;
 	}
 	
-	public void setIdError(int idError) {
-		this.idError = idError;
+	public void setErrorID(int errorID) {
+		this.errorID = errorID;
 	}
 	
 	public String getMessage() {

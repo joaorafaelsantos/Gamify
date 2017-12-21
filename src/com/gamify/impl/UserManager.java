@@ -8,21 +8,25 @@ import com.gamify.interf.InterfaceUser;
 import com.gamify.model.User;
 
 public class UserManager implements InterfaceUser {
-	
+
 	static List<User> users = new ArrayList<User>();
-	
+
 	static UserManager um = null;
 
 	public static UserManager getInstance() {
 		if(um == null) {
 			um = new UserManager();
+			User u1 = new User("joaorsantos", "xpto", "joaorsantos@gamify.pt"); // To remove when add MongoDB
+			User u2 = new User("rcosta", "12345", "rcosta@gamify.pt"); // To remove when add MongoDB
+			users.add(u1); // To remove when add MongoDB
+			users.add(u2); // To remove when add MongoDB
 		}
 		return um;
 	}
 
 	@Override
-	public void createUser(String username, String password, String email) {
-		User u = new User(username, password, email);
+	public void createUser(String userID, String password, String email) {
+		User u = new User(userID, password, email);
 		users.add(u);
 	}
 
@@ -30,39 +34,44 @@ public class UserManager implements InterfaceUser {
 	public List<User> getUsers() {
 		List<User> filteredUsers = new ArrayList<User>();
 		for(User user:users) {
-		    User fu = new User(user.getUsername(), user.getEmail());
-		    filteredUsers.add(fu);
+			User fu = new User(user.getUserID(), user.getEmail());
+			filteredUsers.add(fu);
 		}
-		return filteredUsers;
+		if (filteredUsers.size() != 0) {
+			return filteredUsers;
+		}
+		else {
+			// There are no users
+			return null;
+		}
 	}
-	
+
 	@Override
-	public User getUser(String username) {
-		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
-			User u = (User) iterator.next();
-			if(u.getUsername().equals(username))
-				return u;
+	public User getUser(String userID) {
+		for(User user:users) {
+			if(user.getUserID().equals(userID)) {
+				User fu = new User(user.getUserID(), user.getEmail());
+				return fu;
+			}
 		}
+		// There are no user with that ID
 		return null;
+
 	}
 
 	@Override
-	public void changeUser(String username, User oldUser, User newUser) {
-//		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
-//			User user = (User) iterator.next();
-//			if(user.getUsername().equals(username))
-//				//change here
-//		}
+	public void changeUser(String userID, User oldUser, User newUser) {
+		// Change here
 	}
 
 	@Override
-	public void removeUser(String username) {
+	public void removeUser(String userID) {
 		for (Iterator<User> iterator = users.iterator(); iterator.hasNext();) {
 			User u = (User) iterator.next();
-			if(u.getUsername().equals(username))
+			if(u.getUserID().equals(userID))
 				iterator.remove();
 		}
 	}
-	
+
 }
 

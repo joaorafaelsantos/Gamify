@@ -30,7 +30,7 @@ public class ErrorManager implements InterfaceError {
 	public Error getError(int idError) {
 		for (Iterator<Error> iterator = errors.iterator(); iterator.hasNext();) {
 			Error e = (Error) iterator.next();
-			if(e.getIdError() == idError)
+			if(e.getErrorID() == idError)
 				return e;
 		}
 		return null;
