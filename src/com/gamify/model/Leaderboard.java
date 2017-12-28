@@ -2,8 +2,72 @@ package com.gamify.model;
 
 public class Leaderboard {
 
-	public Leaderboard() {
-		// TODO Auto-generated constructor stub
+	private String leaderboardID;
+	private App appID;
+	private String name;
+	private String type;
+	private String description;
+	private String[] inputs;
+	
+	
+	
+	public Leaderboard(String leaderboardID, App appID, String name, String type, String description) {
+		super();
+		this.leaderboardID = leaderboardID;
+		this.appID = appID;
+		this.name = name;
+		this.type = type;
+		this.description = description;
+		this.inputs = null;
 	}
 
+
+	public String getLeaderboardID() {
+		return leaderboardID;
+	}
+
+	public void setLeaderboardID(String leaderboardID) {
+		this.leaderboardID = leaderboardID;
+	}
+
+	public App getAppID() {
+		return appID;
+	}
+
+	public void setAppID(App appID) {
+		this.appID = appID;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String[] getInputs() {
+		return inputs;
+	}
+
+	public void setInputs(String[] inputs) {
+		this.inputs = inputs;
+	}
+	
 }
