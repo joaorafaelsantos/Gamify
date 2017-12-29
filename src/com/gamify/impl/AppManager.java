@@ -10,7 +10,7 @@ import com.gamify.model.User;
 
 public class AppManager implements InterfaceApp {
 
-	String userLogged = "joaorsantos"; // To do - Change "joaorsantos" by the user who is logged
+	String userAuth = "joaorsantos"; // To change when add auth (token)
 
 	static List<App> apps = new ArrayList<App>();
 
@@ -27,25 +27,39 @@ public class AppManager implements InterfaceApp {
 		return am;
 	}
 
+	// Create new app
+
 	@Override
 	public void createApp(String appID, String userID, String appName, String type, String description) {
 		App a = new App(appID, userID, appName, type, description);
 		apps.add(a);
 	}
 
+	// Get all apps
+
 	@Override
 	public List<App> getApps(String userRequested) {
 
-		if (userRequested.equals(userLogged)) { 
+		boolean permission;
+
+		if (userRequested.equals(userAuth)) {
+			permission = true;
+		}
+		else {
+			permission = false;
+		}
+
+		if (permission == true) { 
 			List<App> filteredApps = new ArrayList<App>();
 			for(App app:apps) {
-				if (app.getUserID() == userLogged) {
+				// List only apps from that user on all apps available
+				if (app.getUserID().equals(userRequested)) {
 					filteredApps.add(app);
 				}
 			}
 			return filteredApps;
 		}
-		else {
+		else if (permission == false) {
 			// The user is not authorized to see apps from another user - TO DO: Send error	
 		}
 		return null;
@@ -56,7 +70,7 @@ public class AppManager implements InterfaceApp {
 	public App getApp(String userID, String appID) {
 		for(App app:apps) {
 			if(app.getAppID().equals(appID)) {
-				if(app.getUserID().equals(userLogged)) {
+				if(app.getUserID().equals(userAuth)) {
 					return app;
 				}
 				else {
@@ -74,7 +88,7 @@ public class AppManager implements InterfaceApp {
 	public void changeApp(String appID, String appName, String type, String description) {
 		for(App app:apps) {
 			if (app.getAppID().equals(appID)) {
-				if (app.getUserID().equals(userLogged) ) {
+				if (app.getUserID().equals(userAuth) ) {
 					App newApp = new App(appID, app.getUserID(),appName, type, description);
 					int i = apps.indexOf(app);
 					apps.set(i, newApp);
@@ -87,7 +101,7 @@ public class AppManager implements InterfaceApp {
 	public void removeApp(String appID) {
 		for(App app:apps) {
 			if (app.getAppID().equals(appID)) {
-				if (app.getUserID().equals(userLogged)) { 
+				if (app.getUserID().equals(userAuth)) { 
 					apps.remove(app);
 				}
 				else {
