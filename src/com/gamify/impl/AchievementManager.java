@@ -34,26 +34,35 @@ public class AchievementManager implements InterfaceAchievement {
 
 	
 
-	public Achievement getAchievement(String achievementID) {
+	public Achievement getAchievement(String userRequested,String achievementID) {
 		
-		
+		boolean exists=false;
 		// permission user belonging achievement
-		boolean permission=true;
-		if(permission) {
+		boolean permission;
+		if (userRequested.equals(userLogged)) {
+			permission = true;
+		}
+		else {
+			permission = false;
+		}
+		
+		
+		if(permission==true) {
 			
 			for (Iterator<Achievement> iterator = achievements.iterator(); iterator.hasNext();) {
 				Achievement achievement = (Achievement) iterator.next();
 				if(achievement.getAchievementID().equals(achievementID))
 					{
+					exists=true;
 					return achievement;
-					}else {
-						//send errors
 					}
-			} 
+			} if (exists == false) {
+				// There are no app with that ID - TO DO: Send error
+			}
 			
+		}else if (permission == false) {
+			// The user is not authorized to see apps from another user - TO DO: Send error	
 		}
-
-		
 
 		return null;
 	}
