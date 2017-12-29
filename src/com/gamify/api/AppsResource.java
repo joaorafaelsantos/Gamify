@@ -32,12 +32,12 @@ public class AppsResource {
 			@FormParam("appName") String appName,
 			@FormParam("type") String type,
 			@FormParam("description") String description,
-			@PathParam("userID") String userID,
 			@Context UriInfo uriInfo) {
 
 		AppManager am = AppManager.getInstance();
-		//User userID = USER IDENTIFIER *TO DO* ...
-		//		am.createApp(appID, userID, appName, type, description);
+		// To change when add auth (token)
+		String userAuth = "joaorsantos";
+		am.createApp(appID, userAuth, appName, type, description);
 
 		UriBuilder builder = uriInfo.getAbsolutePathBuilder();	
 		builder.path(appID);
