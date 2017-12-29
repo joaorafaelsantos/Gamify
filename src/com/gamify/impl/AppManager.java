@@ -65,6 +65,8 @@ public class AppManager implements InterfaceApp {
 		return null;
 
 	}
+	
+	// Get specific app
 
 	@Override
 	public App getApp(String userID, String appID) {
@@ -83,6 +85,8 @@ public class AppManager implements InterfaceApp {
 		}
 		return null;
 	}
+	
+	// Change app
 
 	@Override
 	public void changeApp(String appID, String appName, String type, String description) {
@@ -96,6 +100,8 @@ public class AppManager implements InterfaceApp {
 			}
 		}
 	}
+	
+	// Remove app
 
 	@Override
 	public void removeApp(String appID) {
