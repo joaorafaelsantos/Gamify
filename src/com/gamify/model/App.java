@@ -3,12 +3,12 @@ package com.gamify.model;
 public class App {
 
 	private String appID;
-	private User userID;
+	private String userID;
 	private String appName;
 	private String type;
 	private String description;
 
-	public App(String appID, User userID, String appName, String type, String description) {
+	public App(String appID, String userID, String appName, String type, String description) {
 		super();
 		this.appID = appID;
 		this.userID = userID;
@@ -26,10 +26,10 @@ public class App {
 	}
 
 	public String getUserID() {
-		return userID.getUserID();
+		return userID;
 	}
 
-	public void setUserID(User userID) {
+	public void setUserID(String userID) {
 		this.userID = userID;
 	}
 

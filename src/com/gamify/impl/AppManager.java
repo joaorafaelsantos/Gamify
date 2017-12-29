@@ -19,10 +19,8 @@ public class AppManager implements InterfaceApp {
 	public static AppManager getInstance() {
 		if(am == null) {
 			am = new AppManager();
-			User u1 = new User("joaorsantos", "xpto", "joaorsantos@gamify.pt"); // To remove when add MongoDB
-			User u2 = new User("rcosta", "12345", "rcosta@gamify.pt"); // To remove when add MongoDB
-			App a1 = new App("app1", u1, "Gamify UI", "Marketing", "Lorem Ipsum"); // To remove when add MongoDB
-			App a2 = new App("app1", u2, "randomp", "Entertainment", "Lorem Ipsum 2"); // To remove when add MongoDB
+			App a1 = new App("app1", "joaorsantos", "Gamify UI", "Marketing", "Lorem Ipsum"); // To remove when add MongoDB
+			App a2 = new App("app1", "rcosta", "randomp", "Entertainment", "Lorem Ipsum 2"); // To remove when add MongoDB
 			apps.add(a1); // To remove when add MongoDB
 			apps.add(a2); // To remove when add MongoDB
 		}
@@ -30,7 +28,7 @@ public class AppManager implements InterfaceApp {
 	}
 
 	@Override
-	public void createApp(String appID, User userID, String appName, String type, String description) {
+	public void createApp(String appID, String userID, String appName, String type, String description) {
 		App a = new App(appID, userID, appName, type, description);
 		apps.add(a);
 	}
@@ -73,8 +71,16 @@ public class AppManager implements InterfaceApp {
 	}
 
 	@Override
-	public void changeApp(String appID, App oldApp, App newApp) {
-		// Change app
+	public void changeApp(String appID, String appName, String type, String description) {
+		for(App app:apps) {
+			if (app.getAppID().equals(appID)) {
+				if (app.getUserID().equals(userLogged) ) {
+					App newApp = new App(appID, app.getUserID(),appName, type, description);
+					int i = apps.indexOf(app);
+					apps.set(i, newApp);
+				}
+			}
+		}
 	}
 
 	@Override

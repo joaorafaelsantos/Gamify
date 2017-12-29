@@ -9,6 +9,8 @@ import com.gamify.model.User;
 
 public class UserManager implements InterfaceUser {
 
+	String userLogged = "joaorsantos"; // To do - Change "joaorsantos" by the user who is logged
+
 	static List<User> users = new ArrayList<User>();
 
 	static UserManager um = null;
@@ -60,8 +62,17 @@ public class UserManager implements InterfaceUser {
 	}
 
 	@Override
-	public void changeUser(String userID, User oldUser, User newUser) {
-		// Change here
+	public void changeUser(String userID, String newPassword, String newEmail) {
+		
+		for(User user:users) {
+			if (userID.equals(userLogged) ) {
+				User newUser = new User(userID, newPassword, newEmail);
+				int i = users.indexOf(user);
+				users.set(i, newUser);
+				break;
+			}
+		}
+
 	}
 
 	@Override

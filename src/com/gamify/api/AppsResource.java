@@ -17,6 +17,7 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import com.gamify.impl.AppManager;
+import com.gamify.impl.UserManager;
 import com.gamify.model.App;
 import com.gamify.model.User;
 
@@ -61,6 +62,18 @@ public class AppsResource {
 
 		AppManager am = AppManager.getInstance();		
 		return am.getApp(userID,appID);
+	}
+	
+	// Change a specific user
+	@Path("/{appID}")
+	@POST
+	@Consumes("application/x-www-form-urlencoded")
+	public Response changeApp(@PathParam("appID") String appID, @FormParam("appName") String appName, @FormParam("type") String type, @FormParam("description") String description) {
+
+		AppManager am = AppManager.getInstance();		
+		am.changeApp(appID, appName, type, description);
+
+		return Response.ok().entity("").build();
 	}
 
 	//DELETE a specific app

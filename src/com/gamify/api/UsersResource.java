@@ -30,8 +30,8 @@ public class UsersResource {
 			@FormParam("email") String email,
 			@Context UriInfo uriInfo) {
 
-		UserManager gm = UserManager.getInstance();
-		gm.createUser(userID, password, email);
+		UserManager um = UserManager.getInstance();
+		um.createUser(userID, password, email);
 
 		UriBuilder builder = uriInfo.getAbsolutePathBuilder();	
 		builder.path(userID);
@@ -57,15 +57,27 @@ public class UsersResource {
 		return um.getUser(userID);
 	}
 
-	//DELETE a specific user
+	// Change a specific user
+	@Path("/{userID}")
+	@POST
+	@Consumes("application/x-www-form-urlencoded")
+	public Response changeUser(@PathParam("userID") String userID, @FormParam("password") String password, @FormParam("email") String email) {
+
+		UserManager um = UserManager.getInstance();		
+		um.changeUser(userID, password, email);
+
+		return Response.ok().entity("").build();
+	}
+
+	// DELETE a specific user
 	@Path("/{userID}")
 	@DELETE	
 	public Response removeUser(@PathParam("userID") String userID) {
 
-		UserManager gm = UserManager.getInstance();		
-		gm.removeUser(userID);
+		UserManager um = UserManager.getInstance();		
+		um.removeUser(userID);
 
-		return Response.ok().entity("User removed!").build();
+		return Response.ok().entity("").build();
 	}
 
 }

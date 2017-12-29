@@ -17,8 +17,7 @@ public class AchievementManager implements InterfaceAchievement {
 
 	// Delete when connect to MongoDB
 	
-	static User u1 = new User("joaorsantos", "xpto", "joaorsantos@gamify.pt"); // To remove when add MongoDB
-	static App a1 = new App("app1", u1, "Gamify UI", "Marketing", "Lorem Ipsum"); // To remove when add MongoDB
+	static App a1 = new App("app1", "joaorsantos", "Gamify UI", "Marketing", "Lorem Ipsum"); // To remove when add MongoDB
 	static AchievementManager am = null;
 	
 	public static AchievementManager getInstance() {
