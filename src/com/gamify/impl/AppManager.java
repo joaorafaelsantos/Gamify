@@ -1,12 +1,9 @@
 package com.gamify.impl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
 import com.gamify.interf.InterfaceApp;
 import com.gamify.model.App;
-import com.gamify.model.User;
 
 public class AppManager implements InterfaceApp {
 
