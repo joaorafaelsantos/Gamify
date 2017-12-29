@@ -41,7 +41,9 @@ public class AppManager implements InterfaceApp {
 	public List<App> getApps(String userRequested) {
 
 		boolean permission;
+		boolean exists = false;
 
+		// Check permission
 		if (userRequested.equals(userAuth)) {
 			permission = true;
 		}
@@ -49,15 +51,24 @@ public class AppManager implements InterfaceApp {
 			permission = false;
 		}
 
+
 		if (permission == true) { 
 			List<App> filteredApps = new ArrayList<App>();
 			for(App app:apps) {
 				// List only apps from that user on all apps available
 				if (app.getUserID().equals(userRequested)) {
+					exists = true;
 					filteredApps.add(app);
 				}
 			}
-			return filteredApps;
+			
+			if (exists == true) {
+				return filteredApps;
+			}
+			else {
+				// There are no apps from that user - TO DO: Send error	
+			}
+			
 		}
 		else if (permission == false) {
 			// The user is not authorized to see apps from another user - TO DO: Send error	
@@ -119,7 +130,7 @@ public class AppManager implements InterfaceApp {
 				}
 			}
 		}
-		
+
 		if (exists == false) {
 			// There are no app with that ID - TO DO: Send error
 		}
@@ -129,9 +140,9 @@ public class AppManager implements InterfaceApp {
 
 	@Override
 	public void removeApp(String appID) {
-		
+
 		boolean exists = false;
-		
+
 		for(App app:apps) {
 			// Check if app exists
 			if (app.getAppID().equals(appID)) {
@@ -145,7 +156,7 @@ public class AppManager implements InterfaceApp {
 				}
 			}
 		}
-		
+
 		if (exists == false) {
 			// There are no app with that ID - TO DO: Send error
 		}
