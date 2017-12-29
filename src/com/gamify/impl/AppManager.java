@@ -65,48 +65,78 @@ public class AppManager implements InterfaceApp {
 		return null;
 
 	}
-	
+
 	// Get specific app
 
 	@Override
 	public App getApp(String userID, String appID) {
-		for(App app:apps) {
-			if(app.getAppID().equals(appID)) {
-				if(app.getUserID().equals(userAuth)) {
+		boolean permission;
+		boolean exists = false;
+
+		if (userID.equals(userAuth)) {
+			permission = true;
+		}
+		else {
+			permission = false;
+		}
+
+		if (permission == true) { 
+			for(App app:apps) {
+				if(app.getAppID().equals(appID)) {
+					exists = true;
 					return app;
 				}
-				else {
-					// The user is not authorized to see that app - TO DO: Send error
-				}
 			}
-			else {
-				// The app not exists - TO DO: Send error
+			if (exists == false) {
+				// There are no app with that ID - TO DO: Send error
 			}
+		}
+		else if (permission == false) {
+			// The user is not authorized to see apps from another user - TO DO: Send error	
 		}
 		return null;
 	}
-	
+
 	// Change app
 
 	@Override
 	public void changeApp(String appID, String appName, String type, String description) {
+
+		boolean exists = false;
+
 		for(App app:apps) {
+			// Check if app exists
 			if (app.getAppID().equals(appID)) {
+				exists = true;
+				// Check if the user have permission to change the app
 				if (app.getUserID().equals(userAuth) ) {
 					App newApp = new App(appID, app.getUserID(),appName, type, description);
 					int i = apps.indexOf(app);
 					apps.set(i, newApp);
 				}
+				else {
+					// The user is not authorized to change the apps from another user - TO DO: Send error	
+				}
 			}
 		}
+		
+		if (exists == false) {
+			// There are no app with that ID - TO DO: Send error
+		}
 	}
-	
+
 	// Remove app
 
 	@Override
 	public void removeApp(String appID) {
+		
+		boolean exists = false;
+		
 		for(App app:apps) {
+			// Check if app exists
 			if (app.getAppID().equals(appID)) {
+				exists = true;
+				// Check if the user have permission to change the app
 				if (app.getUserID().equals(userAuth)) { 
 					apps.remove(app);
 				}
@@ -114,9 +144,10 @@ public class AppManager implements InterfaceApp {
 					// The user is not authorized to remove - TO DO: Send error
 				}
 			}
-			else {
-				// The app not exists - TO DO: Send error
-			}
+		}
+		
+		if (exists == false) {
+			// There are no app with that ID - TO DO: Send error
 		}
 	}
 
