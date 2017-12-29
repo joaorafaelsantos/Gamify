@@ -24,6 +24,8 @@ import com.gamify.model.User;
 @Path("/users/{userID}/apps")
 public class AppsResource {
 
+	String userAuth = "joaorsantos"; // To change when add auth (token)
+
 	// Create new app
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
@@ -35,8 +37,7 @@ public class AppsResource {
 			@Context UriInfo uriInfo) {
 
 		AppManager am = AppManager.getInstance();
-		// To change when add auth (token)
-		String userAuth = "joaorsantos";
+
 		am.createApp(appID, userAuth, appName, type, description);
 
 		UriBuilder builder = uriInfo.getAbsolutePathBuilder();	
@@ -63,7 +64,7 @@ public class AppsResource {
 		AppManager am = AppManager.getInstance();		
 		return am.getApp(userID,appID);
 	}
-	
+
 	// Change a specific user
 	@Path("/{appID}")
 	@POST
@@ -73,7 +74,7 @@ public class AppsResource {
 		AppManager am = AppManager.getInstance();		
 		am.changeApp(appID, appName, type, description);
 
-		return Response.ok().entity("").build();
+		return Response.ok().entity("").build(); // Send response * TO DO *
 	}
 
 	//DELETE a specific app
@@ -84,7 +85,7 @@ public class AppsResource {
 		AppManager am = AppManager.getInstance();		
 		am.removeApp(appID);
 
-		return Response.ok().entity("App removed!").build();
+		return Response.ok().entity("").build(); // Send response * TO DO *
 	}
 
 }

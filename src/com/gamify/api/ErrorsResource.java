@@ -14,16 +14,16 @@ import com.gamify.model.Error;
 
 @Path("/errors")
 public class ErrorsResource {
-	
+
 	// Get all errors
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Error> getErrors() {
-		
+
 		ErrorManager em = ErrorManager.getInstance();		
 		return em.getErrors();
 	}
-	
+
 	// GET a specific error
 	@Path("/{errorID}")
 	@GET

@@ -21,7 +21,7 @@ import com.gamify.model.User;
 
 @Path("/users")
 public class UsersResource {
-	//Create new user
+	// Create new user
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
 	public Response createUser(
@@ -66,7 +66,7 @@ public class UsersResource {
 		UserManager um = UserManager.getInstance();		
 		um.changeUser(userID, password, email);
 
-		return Response.ok().entity("").build();
+		return Response.ok().entity("").build(); // Send response * TO DO *
 	}
 
 	// DELETE a specific user
@@ -77,7 +77,7 @@ public class UsersResource {
 		UserManager um = UserManager.getInstance();		
 		um.removeUser(userID);
 
-		return Response.ok().entity("").build();
+		return Response.ok().entity("").build(); // Send response * TO DO *
 	}
 
 }
