@@ -6,6 +6,7 @@ public class Achievement {
 	private App appID;
 	private String name;
 	private String structure;
+	private String reward;
 	private String goal;
 	private String type;
 	private String description;
@@ -14,19 +15,21 @@ public class Achievement {
 	
 	
 	
-	public Achievement(String achievementID, App appID, String name, String structure, String goal, String type,
-			String description) {
+	
+	
+	public Achievement(String achievementID, App appID, String name, String structure, String reward, String goal,
+			String type, String description) {
 		super();
 		this.achievementID = achievementID;
 		this.appID = appID;
 		this.name = name;
 		this.structure = structure;
+		this.reward = reward;
 		this.goal = goal;
 		this.type = type;
 		this.description = description;
 		this.inputs=null;
 	}
-	
 	public String getAchievementID() {
 		return achievementID;
 	}
@@ -50,6 +53,12 @@ public class Achievement {
 	}
 	public void setStructure(String structure) {
 		this.structure = structure;
+	}
+	public String getReward() {
+		return reward;
+	}
+	public void setReward(String reward) {
+		this.reward = reward;
 	}
 	public String getGoal() {
 		return goal;
