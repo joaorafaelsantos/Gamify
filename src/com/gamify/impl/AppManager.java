@@ -110,6 +110,7 @@ public class AppManager implements InterfaceApp {
 					App newApp = new App(appID, app.getUserID(),appName, type, description);
 					int i = apps.indexOf(app);
 					apps.set(i, newApp);
+					break;
 				}
 				else {
 					// The user is not authorized to change the apps from another user - TO DO: Send error	
@@ -136,6 +137,7 @@ public class AppManager implements InterfaceApp {
 				// Check if the user have permission to change the app
 				if (app.getUserID().equals(userAuth)) { 
 					apps.remove(app);
+					break;
 				}
 				else {
 					// The user is not authorized to remove - TO DO: Send error

@@ -65,7 +65,7 @@ public class AppsResource {
 		return am.getApp(userID,appID);
 	}
 
-	// Change a specific user
+	// Change a specific app
 	@Path("/{appID}")
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
