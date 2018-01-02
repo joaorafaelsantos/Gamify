@@ -196,6 +196,9 @@ public class AchievementManager implements InterfaceAchievement {
 			// There are no achievement with that ID - TO DO: Send error
 		}
 	}
+	
+	
+	// Submit inputs 
 
 	public Achievement inputsAchievements(String appID,String achievementID, String name, String score) {
 
@@ -245,9 +248,7 @@ public class AchievementManager implements InterfaceAchievement {
 		return null;
 		
 
-		// inputs
 		
-		// leaderboards + reset
 	}
 
 }
