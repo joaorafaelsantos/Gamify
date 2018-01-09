@@ -3,7 +3,7 @@ package com.gamify.model;
 public class Achievement {
 
 	private String achievementID;
-	private App appID;
+	private String appID;
 	private String name;
 	private String structure;
 	private String reward;
@@ -12,12 +12,7 @@ public class Achievement {
 	private String description;
 	private Input[] input;
 	
-	
-	
-	
-	
-	
-	public Achievement(String achievementID, App appID, String name, String structure, String reward, String goal,
+	public Achievement(String achievementID, String appID, String name, String structure, String reward, String goal,
 			String type, String description) {
 		super();
 		this.achievementID = achievementID;
@@ -36,10 +31,10 @@ public class Achievement {
 	public void setAchievementID(String achievementID) {
 		this.achievementID = achievementID;
 	}
-	public App getAppID() {
+	public String getAppID() {
 		return appID;
 	}
-	public void setAppID(App appID) {
+	public void setAppID(String appID) {
 		this.appID = appID;
 	}
 	public String getName() {

@@ -34,7 +34,7 @@ public class AchievementsResource {
 	@Consumes("application/x-www-form-urlencoded")
 	public Response createAchievement(
 			@FormParam("achievementID") String achievementID,
-			@PathParam("appID") App appID,
+			@PathParam("appID") String appID,
 			@FormParam("achievementName") String achievementName,
 			@FormParam("structure") String structure,
 			@FormParam("reward") String reward,
@@ -72,10 +72,8 @@ public class AchievementsResource {
 		return am.getAchievement(appID,achievementID);
 	}
 
-	
-	@Path("/{achievementID}")
-	
 	// Add Inputs to achievement
+	@Path("/{achievementID}")
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
 	public Achievement inputsAchievements(@PathParam("appID") String appID,@PathParam("achievementID") String achievementID, @FormParam("name") String name, @FormParam("score") String score) {
@@ -85,6 +83,7 @@ public class AchievementsResource {
 	}
 	
 	// Change a specific achievement
+	@Path("/{achievementID}")
 	@PUT
 	@Consumes("application/x-www-form-urlencoded")
 	
