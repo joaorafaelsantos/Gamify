@@ -7,6 +7,7 @@ import java.util.List;
 import com.gamify.interf.InterfaceAchievement;
 import com.gamify.model.Achievement;
 import com.gamify.model.App;
+import com.gamify.model.Input;
 import com.gamify.model.User;
 
 public class AchievementManager implements InterfaceAchievement {
@@ -204,7 +205,8 @@ public class AchievementManager implements InterfaceAchievement {
 
 		boolean permission = false;
 		boolean exists=false;
-		String[] oldInputs;
+		Input[] oldinputs=null;
+		
 		
 
 		// Permissions for request
@@ -227,9 +229,22 @@ public class AchievementManager implements InterfaceAchievement {
 			for (Achievement achievement : achievements) {
 				if (achievement.getAchievementID().equals(achievementID)) {
 					exists = true;
-					oldInputs =achievement.getInputs();
 					
-					//return achievement;
+					
+					for(int i =0; i<=achievement.getInputs().length; i++ ) {
+						if (i==achievement.getInputs().length) {
+							
+							Input input = new Input(name,score);
+							
+							
+							//oldinputs.add(input);
+							
+						}
+					}
+					
+					
+					
+					return achievement;
 				}
 				
 			}

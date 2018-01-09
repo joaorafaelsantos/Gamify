@@ -7,6 +7,7 @@ import com.gamify.interf.InterfaceAchievement;
 import com.gamify.interf.InterfaceLeaderboard;
 import com.gamify.model.Achievement;
 import com.gamify.model.App;
+import com.gamify.model.Input;
 import com.gamify.model.Leaderboard;
 
 public class LeaderboardManager implements InterfaceLeaderboard {
@@ -286,7 +287,46 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 
 	public void resetLeaderBoardTotal(String appID, String leaderboardID) {
 
+		boolean permission = false;
+		boolean exists = false;
+
+		// Permissions for request
+
+		for (App app : apps) {
+			if (app.getAppID().toString().equals(appID)) {
+
+				if (app.getUserID().equals(userAuth)) {
+					permission = true;
+				}
+
+			} else {
+				permission = false;
+			}
+
+		}
+
+		if (permission == true) {
+
+			for (Leaderboard leaderboard : leaderboards) {
+				if (leaderboard.getLeaderboardID().equals(leaderboardID)) {
+					exists = true;
+					
+					leaderboard.setInputs(null);
 		
+					
+				}
+				
+			}
+
+		}
+
+		else if (permission == false) {
+			// The user is not authorized to reset leaderboard from another user - TO DO:
+			// Send error
+		}
+		if (exists == false) {
+			// There are no leaderboard with that ID - TO DO: Send error
+		}
 	}
 
 }

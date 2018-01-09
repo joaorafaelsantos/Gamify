@@ -7,7 +7,7 @@ public class Leaderboard {
 	private String name;
 	private String type;
 	private String description;
-	private String[] inputs;
+	private Input[] input;
 	
 	
 	
@@ -18,7 +18,7 @@ public class Leaderboard {
 		this.name = name;
 		this.type = type;
 		this.description = description;
-		this.inputs = null;
+		this.input = null;
 	}
 
 
@@ -62,12 +62,16 @@ public class Leaderboard {
 		this.description = description;
 	}
 
-	public String[] getInputs() {
-		return inputs;
+
+	public Input[] getInputs() {
+		return input;
 	}
 
-	public void setInputs(String[] inputs) {
-		this.inputs = inputs;
+
+	public void setInputs(Input[] inputs) {
+		this.input = inputs;
 	}
+
+	
 	
 }

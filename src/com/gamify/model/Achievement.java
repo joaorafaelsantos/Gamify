@@ -10,7 +10,7 @@ public class Achievement {
 	private String goal;
 	private String type;
 	private String description;
-	private String[] inputs;
+	private Input[] input;
 	
 	
 	
@@ -28,7 +28,7 @@ public class Achievement {
 		this.goal = goal;
 		this.type = type;
 		this.description = description;
-		this.inputs=null;
+		this.input=null;
 	}
 	public String getAchievementID() {
 		return achievementID;
@@ -78,11 +78,13 @@ public class Achievement {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String[] getInputs() {
-		return inputs;
+	public Input[] getInputs() {
+		return input;
 	}
-	public void setInputs(String[] inputs) {
-		this.inputs = inputs;
+	public void setInputs(Input[] inputs) {
+		this.input = inputs;
 	}
+	
+	
 }
 
