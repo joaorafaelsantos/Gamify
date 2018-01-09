@@ -32,9 +32,16 @@ public class AchievementManager implements InterfaceAchievement {
 			apps.add(a2);
 
 			Achievement ach1 = new Achievement("ach1", "app1", "watch 100", "progressive","Premium account for 1 month", "100", "entertainment", "watch 100 videos");
-			Achievement ach2 = new Achievement("ach2", "app2", "Get customer", "static", "1 day off","1", "productivity", "get your fist customer");
+			Achievement ach2 = new Achievement("ach2", "app1", "Get customer", "static", "1 day off","1", "productivity", "get your fist customer");
 			Achievement ach3 = new Achievement("ach3", "app2", "Empates", "static", "1","1 euro", "Game", "empatar 1 jogos");
-
+			
+			
+			
+			//Input input = new Input("asd","123");
+			//List<Input> inputs = new ArrayList<Input>();
+			//inputs.add(input);
+			//ach1.setInputs(inputs);
+			
 			achievements.add(ach1);
 			achievements.add(ach2);
 			achievements.add(ach3);
@@ -213,7 +220,7 @@ public class AchievementManager implements InterfaceAchievement {
 
 		boolean permission = false;
 		boolean exists=false;
-		Input[] oldinputs=null;
+		
 		
 		
 
@@ -239,13 +246,18 @@ public class AchievementManager implements InterfaceAchievement {
 					exists = true;
 					
 					
-					for(int i =0; i<=achievement.getInputs().length; i++ ) {
-						if (i==achievement.getInputs().length) {
+					for(int i =0; i<=achievement.getInputs().size(); i++ ) {
+						if (i==achievement.getInputs().size()) {
 							
-							Input input = new Input(name,score);
+							//Input input = new Input(name,score);
+							Input input = new Input("tes","sd");
 							
+							//List<Input> inputs = new ArrayList<Input>(achievement.getInputs());
+							List<Input> inputs = new ArrayList<Input>();
+							inputs.add(input);
+							achievement.setInputs(inputs);
+							achievement.setGoal("testtting");
 							
-							//oldinputs.add(input);
 							
 						}
 					}
