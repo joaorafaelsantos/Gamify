@@ -1,24 +1,26 @@
 package com.gamify.model;
 
+import java.util.List;
+
 public class Leaderboard {
 
 	private String leaderboardID;
-	private App appID;
+	private String appID;
 	private String name;
 	private String type;
 	private String description;
-	private Input[] input;
+	private List<Input> inputs;
 	
 	
 	
-	public Leaderboard(String leaderboardID, App appID, String name, String type, String description) {
+	public Leaderboard(String leaderboardID, String appID, String name, String type, String description) {
 		super();
 		this.leaderboardID = leaderboardID;
 		this.appID = appID;
 		this.name = name;
 		this.type = type;
 		this.description = description;
-		this.input = null;
+		this.inputs = null;
 	}
 
 
@@ -30,11 +32,11 @@ public class Leaderboard {
 		this.leaderboardID = leaderboardID;
 	}
 
-	public App getAppID() {
+	public String getAppID() {
 		return appID;
 	}
 
-	public void setAppID(App appID) {
+	public void setAppID(String appID) {
 		this.appID = appID;
 	}
 
@@ -63,13 +65,13 @@ public class Leaderboard {
 	}
 
 
-	public Input[] getInputs() {
-		return input;
+	public List<Input> getInputs() {
+		return inputs;
 	}
 
 
-	public void setInputs(Input[] inputs) {
-		this.input = inputs;
+	public void setInputs(List<Input>inputs) {
+		this.inputs = inputs;
 	}
 
 	

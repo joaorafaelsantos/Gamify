@@ -35,7 +35,7 @@ public class AchievementsResource {
 	public Response createAchievement(
 			@FormParam("achievementID") String achievementID,
 			@PathParam("appID") String appID,
-			@FormParam("achievementName") String achievementName,
+			@FormParam("name") String name,
 			@FormParam("structure") String structure,
 			@FormParam("reward") String reward,
 			@FormParam("goal") String goal,
@@ -45,7 +45,7 @@ public class AchievementsResource {
 
 		AchievementManager am = AchievementManager.getInstance();
 
-		am.createAchievement(achievementID, appID, achievementName, structure,reward, goal,type,description);
+		am.createAchievement(achievementID, appID, name, structure,reward, goal,type,description);
 
 		UriBuilder builder = uriInfo.getAbsolutePathBuilder();	
 		builder.path(achievementID);
@@ -53,7 +53,7 @@ public class AchievementsResource {
 	}
 
 
-	// Get all achievement
+	// Get all achievements
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Achievement> getAchievements(@PathParam("appID") String appID) {
@@ -76,9 +76,11 @@ public class AchievementsResource {
 	@Path("/{achievementID}")
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
-	public Achievement inputsAchievements(@PathParam("appID") String appID,@PathParam("achievementID") String achievementID, @FormParam("name") String name, @FormParam("score") String score) {
-		AchievementManager am = AchievementManager.getInstance();		
-		return am.inputsAchievements(appID,achievementID,name,score);
+	public Response inputsAchievements(@PathParam("appID") String appID,@PathParam("achievementID") String achievementID, @FormParam("name") String name, @FormParam("score") String score) {
+		AchievementManager am = AchievementManager.getInstance();
+		am.inputsAchievements(appID,achievementID,name,score);
+		return Response.ok().entity("").build();
+		
 		
 	}
 	
@@ -87,10 +89,10 @@ public class AchievementsResource {
 	@PUT
 	@Consumes("application/x-www-form-urlencoded")
 	
-	public Response changeAchievement(@PathParam("achievementID") String achievementID, @FormParam("achievementName") String achievementName, @FormParam("reward") String reward, @FormParam("goal") String goal, @FormParam("type") String type, @FormParam("description") String description) {
+	public Response changeAchievement(@PathParam("achievementID") String achievementID, @FormParam("name") String name, @FormParam("reward") String reward, @FormParam("goal") String goal, @FormParam("type") String type, @FormParam("description") String description) {
 
 		AchievementManager am = AchievementManager.getInstance();		
-		am.changeAchievement(achievementID, achievementName, reward,goal, type, description);
+		am.changeAchievement(achievementID, name, reward,goal, type, description);
 
 		return Response.ok().entity("").build(); // Send response * TO DO *
 	}

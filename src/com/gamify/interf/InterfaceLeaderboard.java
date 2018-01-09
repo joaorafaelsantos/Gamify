@@ -8,7 +8,7 @@ import com.gamify.model.Leaderboard;
 
 public interface InterfaceLeaderboard {
 	
-	public void createLeaderboard(String leaderboardID, App idApp, String name, String type, String description);
+	public void createLeaderboard(String leaderboardID, String appID, String name, String type, String description);
 	public List<Leaderboard> getLeaderboards(String appID);
 	public Leaderboard getLeaderboard(String appID, String leaderboardID);
 	public void changeLeaderboard(String leaderboardID, String leaderboardName, String type, String description);

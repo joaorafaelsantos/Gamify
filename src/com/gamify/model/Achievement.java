@@ -1,6 +1,6 @@
 package com.gamify.model;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class Achievement {

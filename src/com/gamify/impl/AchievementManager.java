@@ -37,11 +37,6 @@ public class AchievementManager implements InterfaceAchievement {
 			
 			
 			
-			//Input input = new Input("asd","123");
-			//List<Input> inputs = new ArrayList<Input>();
-			//inputs.add(input);
-			//ach1.setInputs(inputs);
-			
 			achievements.add(ach1);
 			achievements.add(ach2);
 			achievements.add(ach3);
@@ -137,7 +132,7 @@ public class AchievementManager implements InterfaceAchievement {
 
 	// Change achievement
 	@Override
-	public void changeAchievement(String achievementID, String achievementName,String reward, String goal, String type,
+	public void changeAchievement(String achievementID, String name,String reward, String goal, String type,
 			String description) {
 		boolean exists = false;
 		String checkUser = null;
@@ -162,7 +157,7 @@ public class AchievementManager implements InterfaceAchievement {
 			}
 
 			if (checkUser.equals(userAuth)) {
-				Achievement newAchievement = new Achievement(achievementID, tempAchievement.getAppID(), achievementName,
+				Achievement newAchievement = new Achievement(achievementID, tempAchievement.getAppID(), name,
 						tempAchievement.getStructure(), reward, goal, type, description);
 				int i = tempAchievementPosition;
 				achievements.set(i, newAchievement);
@@ -182,14 +177,13 @@ public class AchievementManager implements InterfaceAchievement {
 		boolean exists = false;
 		String checkUser = null;
 		Achievement tempAchievement = null;
-		int tempAchievementPosition = 0;
-
+		
 		for (Achievement achievement : achievements) {
 			// Check if achievement exists
 			if (achievement.getAchievementID().equals(achievementID)) {
 				exists = true;
 				tempAchievement = achievement;
-				tempAchievementPosition = achievements.indexOf(achievement);
+				
 			}
 		}
 		
@@ -218,70 +212,51 @@ public class AchievementManager implements InterfaceAchievement {
 	@Override
 	public Achievement inputsAchievements(String appID,String achievementID, String name, String score) {
 
+		
+		boolean exists = false;
 		boolean permission = false;
-		boolean exists=false;
-		
-		
 		
 
 		// Permissions for request
 
 		for (App app : apps) {
-			if (app.getAppID().toString().equals(appID)) {
+			if (app.getAppID().equals(appID)) {
 
-				
 				if (app.getUserID().equals(userAuth)) {
 					permission = true;
 				}
-
-			} else {
-				permission = false;
-			}
-
+			} 
 		}
 
 		if (permission == true) {
 			for (Achievement achievement : achievements) {
+
 				if (achievement.getAchievementID().equals(achievementID)) {
 					exists = true;
 					
+					List<Input> inputs = new ArrayList<Input>();
+					inputs = achievement.getInputs();
+					Input input = new Input(name,score);
 					
-					for(int i =0; i<=achievement.getInputs().size(); i++ ) {
-						if (i==achievement.getInputs().size()) {
-							
-							//Input input = new Input(name,score);
-							Input input = new Input("tes","sd");
-							
-							//List<Input> inputs = new ArrayList<Input>(achievement.getInputs());
-							List<Input> inputs = new ArrayList<Input>();
-							inputs.add(input);
-							achievement.setInputs(inputs);
-							achievement.setGoal("testtting");
-							
-							
-						}
-					}
+					//inputs = achievement.getInputs();
+
 					
+					inputs.add(input);
+					achievement.setInputs(inputs);
 					
-					
-					return achievement;
 				}
-				
 			}
 			
 			
 
-		}
-
-		else if (permission == false) {
+			if (exists == false) {
+				// There are no achievement with that ID - TO DO: Send error
+			}
+		} else if (permission == false) {
 			// The user is not authorized to see achievements from another user - TO DO:
 			// Send error
 		}
-		if (exists == false) {
-			// There are no achievement with that ID - TO DO: Send error
-		}
 		return null;
-		
 
 		
 	}
