@@ -121,10 +121,11 @@ public class LeaderboardsResource {
 	@Path("/{leaderboardID}/reset/total")
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
-	public void resetLeaderBoardTotal(@PathParam("appID") String appID, @PathParam("leaderboardID") String leaderboardID) {
+	public Response resetLeaderBoardTotal(@PathParam("appID") String appID, @PathParam("leaderboardID") String leaderboardID) {
 
 		LeaderboardManager lm = LeaderboardManager.getInstance();		
 		lm.resetLeaderBoardScore(appID, leaderboardID);
+		return Response.ok().entity("").build();
 	}
 
 }

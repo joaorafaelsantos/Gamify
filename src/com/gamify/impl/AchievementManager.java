@@ -37,6 +37,12 @@ public class AchievementManager implements InterfaceAchievement {
 			
 			
 			
+			List<Input> inputs = new ArrayList<Input>();
+			
+			ach1.setInputs(inputs);
+			ach2.setInputs(inputs);
+			ach3.setInputs(inputs);
+			
 			achievements.add(ach1);
 			achievements.add(ach2);
 			achievements.add(ach3);
@@ -51,6 +57,8 @@ public class AchievementManager implements InterfaceAchievement {
 			String goal, String type, String description) {
 		Achievement a = new Achievement(achievementID, appID, name, structure, reward,
 				 goal, type, description);
+		List<Input> inputs = new ArrayList<Input>();
+		a.setInputs(inputs);
 		achievements.add(a);
 	}
 	
@@ -234,13 +242,9 @@ public class AchievementManager implements InterfaceAchievement {
 				if (achievement.getAchievementID().equals(achievementID)) {
 					exists = true;
 					
-					List<Input> inputs = new ArrayList<Input>();
-					inputs = achievement.getInputs();
+					List<Input> inputs = new ArrayList<Input>(achievement.getInputs());
+					
 					Input input = new Input(name,score);
-					
-					//inputs = achievement.getInputs();
-
-					
 					inputs.add(input);
 					achievement.setInputs(inputs);
 					

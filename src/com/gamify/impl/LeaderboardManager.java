@@ -5,7 +5,7 @@ import java.util.List;
 
 
 import com.gamify.interf.InterfaceLeaderboard;
-
+import com.gamify.model.Achievement;
 import com.gamify.model.App;
 import com.gamify.model.Input;
 import com.gamify.model.Leaderboard;
@@ -35,9 +35,10 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 					"useres with more comments ranking");
 			
 			List<Input> inputs = new ArrayList<Input>();
-			Input input = new Input("asd","score");
-			inputs.add(input);
+			
 			lb1.setInputs(inputs);
+			
+			
 			leaderboards.add(lb1);
 			leaderboards.add(lb2);
 
@@ -49,6 +50,8 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 	@Override
 	public void createLeaderboard(String leaderboardID, String appID, String name, String type, String description) {
 		Leaderboard l = new Leaderboard(leaderboardID, appID, name, type, description);
+		List<Input> inputs = new ArrayList<Input>();
+		l.setInputs(inputs);
 		leaderboards.add(l);
 	}
 
@@ -215,24 +218,30 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 		// Permissions for request
 
 		for (App app : apps) {
-			if (app.getAppID().toString().equals(appID)) {
+			if (app.getAppID().equals(appID)) {
 
 				if (app.getUserID().equals(userAuth)) {
 					permission = true;
 				}
-
-			} else {
-				permission = false;
-			}
-
+			} 
 		}
 
 		if (permission == true) {
 
-			// TO:DO
-			//
-			//
-			//
+			for (Leaderboard leaderboard : leaderboards) {
+
+				if (leaderboard.getLeaderboardID().equals(leaderboardID)) {
+					exists = true;
+					
+					
+					List<Input> inputs = new ArrayList<Input>(leaderboard.getInputs());
+					
+					Input input = new Input(name,score);
+					inputs.add(input);
+					leaderboard.setInputs(inputs);
+					
+				}
+			}
 
 		}
 
@@ -254,25 +263,23 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 		boolean permission = false;
 		boolean exists = false;
 
+		
+
 		// Permissions for request
 
-		for (App app : apps) {
-			if (app.getAppID().toString().equals(appID)) {
+				for (App app : apps) {
+					if (app.getAppID().equals(appID)) {
 
-				if (app.getUserID().equals(userAuth)) {
-					permission = true;
+						if (app.getUserID().equals(userAuth)) {
+							permission = true;
+						}
+					} 
 				}
-
-			} else {
-				permission = false;
-			}
-
-		}
 
 		if (permission == true) {
 
 			// TO:DO
-			//
+			// iterar sobre o arraylist leaderboard.getInputs() score = 0;
 			//
 			//
 
@@ -295,17 +302,14 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 
 		// Permissions for request
 
+
 		for (App app : apps) {
-			if (app.getAppID().toString().equals(appID)) {
+			if (app.getAppID().equals(appID)) {
 
 				if (app.getUserID().equals(userAuth)) {
 					permission = true;
 				}
-
-			} else {
-				permission = false;
-			}
-
+			} 
 		}
 
 		if (permission == true) {
@@ -314,7 +318,9 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 				if (leaderboard.getLeaderboardID().equals(leaderboardID)) {
 					exists = true;
 
-					leaderboard.setInputs(null);
+					List<Input> inputs = new ArrayList<Input>();
+					
+					leaderboard.setInputs(inputs);
 
 				}
 
