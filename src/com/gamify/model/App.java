@@ -8,6 +8,8 @@ public class App {
 	private String type;
 	private String description;
 
+	public App() {}
+	
 	public App(String appID, String userID, String appName, String type, String description) {
 		super();
 		this.appID = appID;

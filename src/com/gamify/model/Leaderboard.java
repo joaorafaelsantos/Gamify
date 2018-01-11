@@ -11,8 +11,8 @@ public class Leaderboard {
 	private String description;
 	private List<Input> inputs;
 	
-	
-	
+	public Leaderboard() {}
+
 	public Leaderboard(String leaderboardID, String appID, String name, String type, String description) {
 		super();
 		this.leaderboardID = leaderboardID;

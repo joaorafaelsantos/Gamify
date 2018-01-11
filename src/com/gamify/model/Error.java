@@ -7,6 +7,8 @@ public class Error {
 	private String link;
 	private int http_status;
 	
+	public Error() {}
+	
 	public Error(int errorID, String message, String link, int http_status) {
 		super();
 		this.errorID = errorID;

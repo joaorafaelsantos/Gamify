@@ -51,7 +51,7 @@ public class UsersResource {
 	@Path("/{userID}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public User getUser(@PathParam("userID") String userID) {
+	public List<User> getUser(@PathParam("userID") String userID) {
 
 		UserManager um = UserManager.getInstance();		
 		return um.getUser(userID);

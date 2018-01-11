@@ -15,6 +15,8 @@ public class Achievement {
 	private String description;
 	private List<Input> inputs;
 	
+	public Achievement() {}
+	
 	public Achievement(String achievementID, String appID, String name, String structure, String reward, String goal,
 			String type, String description) {
 		super();
