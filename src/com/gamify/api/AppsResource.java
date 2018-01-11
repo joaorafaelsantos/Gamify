@@ -59,7 +59,7 @@ public class AppsResource {
 	@Path("/{appID}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public App getApp(@PathParam("userID") String userID, @PathParam("appID") String appID) {
+	public List<App> getApp(@PathParam("userID") String userID, @PathParam("appID") String appID) {
 
 		AppManager am = AppManager.getInstance();		
 		return am.getApp(userID,appID);

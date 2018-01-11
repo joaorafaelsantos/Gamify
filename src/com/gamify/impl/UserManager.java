@@ -31,7 +31,7 @@ public class UserManager implements InterfaceUser {
 		User user = new User(userID, password, email);
 		
 		UserData userData = UserData.getInstance();				
-		userData.insertUser(user);
+		userData.insertData(user);
 	}
 
 	// Get all users

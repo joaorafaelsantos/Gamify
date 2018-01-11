@@ -40,7 +40,7 @@ public class UserData {
 	}
 	
 	
-	public void insertUser(User user) {			
+	public void insertData(User user) {			
 			colUser.insertOne(user);
 	}	
 
