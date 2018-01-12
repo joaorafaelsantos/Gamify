@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gamify.data.AppData;
+import com.gamify.data.ErrorData;
 import com.gamify.interf.InterfaceApp;
 import com.gamify.model.App;
 
@@ -34,31 +35,33 @@ public class AppManager implements InterfaceApp {
 	// Get all apps
 
 	@Override
-	public List<App> getApps(String userRequested) {
+	public Object getApps(String userRequested) {
 		if (userRequested.equals(userAuth)) {
 			AppData appData = AppData.getInstance();				
 			return appData.getData(userRequested);
 		}
 		else {
-			// The user is not authorized to see apps from another user - TO DO: Send error	
+			// The user is not authorized to see apps from another user
+			ErrorData errorData = ErrorData.getInstance();				
+			return errorData.getData("3");
 		}
 
-		return null;
 	}
 
 	// Get specific app
 
 	@Override
-	public List<App> getApp(String userRequested, String appID) {
+	public Object getApp(String userRequested, String appID) {
 		if (userRequested.equals(userAuth)) {
 			AppData appData = AppData.getInstance();				
 			return appData.getSpecificData(userRequested, appID);
 		}
 		else {
-			// The user is not authorized to see apps from another user - TO DO: Send error	
+			// The user is not authorized to see apps from another user
+			ErrorData errorData = ErrorData.getInstance();				
+			return errorData.getData("3");
 		}
 
-		return null;
 	}
 
 	// Change app
@@ -79,13 +82,17 @@ public class AppManager implements InterfaceApp {
 					appData.changeData(appID, appName, type, description);
 				}
 				else {
-					// The user is not authorized to change the apps from another user - TO DO: Send error	
+					// The user is not authorized to change the apps from another user
+					ErrorData errorData = ErrorData.getInstance();				
+					errorData.getData("3");
 				}
 			}
 		}
 		
 		if (exists == false) {
-			// There are no app with that ID - TO DO: Send error
+			// There are no app with that ID
+			ErrorData errorData = ErrorData.getInstance();				
+			errorData.getData("7");
 		}
 	}
 
@@ -107,13 +114,17 @@ public class AppManager implements InterfaceApp {
 					appData.removeData(appID);
 				}
 				else {
-					// The user is not authorized to change the apps from another user - TO DO: Send error	
+					// The user is not authorized to change the apps from another user
+					ErrorData errorData = ErrorData.getInstance();				
+					errorData.getData("3");
 				}
 			}
 		}
 		
 		if (exists == false) {
-			// There are no app with that ID - TO DO: Send error
+			// There are no app with that ID
+			ErrorData errorData = ErrorData.getInstance();				
+			errorData.getData("7");
 		}
 
 

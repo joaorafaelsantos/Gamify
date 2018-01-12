@@ -28,10 +28,9 @@ public class ErrorsResource {
 	@Path("/{errorID}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Error getError(@PathParam("errorID") String errorID) {
+	public List<Error> getError(@PathParam("errorID") String errorID) {
 		ErrorManager em = ErrorManager.getInstance();	
-		int parsedErrorID = Integer.parseInt(errorID);
-		return em.getError(parsedErrorID);
+		return em.getError(errorID);
 	}
 
 }

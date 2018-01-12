@@ -60,7 +60,7 @@ public class AppData {
 
 	return apps;
 }
-	public List<App> getData(String userRequested) {
+	public Object getData(String userRequested) {
 		
 		List<App> apps = new ArrayList<App>();
 		
@@ -77,11 +77,12 @@ public class AppData {
 		
 	}
 	
-	public List<App> getSpecificData(String appID, String userRequested) {	
+	public Object getSpecificData(String userRequested, String appID) {	
 		
 		final List<App> apps = new ArrayList<App>();
 		
 		Block<App> printBlock = new Block<App>() {
+			@Override
 		    public void apply(final App app) {
 		    	apps.add(app);
 		    }
@@ -93,7 +94,15 @@ public class AppData {
 		
 		colApp.find(filter).forEach(printBlock);
 		
-		return apps;
+		if (apps.size() != 0) {
+			return apps;
+		}
+		else {
+			// There are no app with that ID
+			ErrorData errorData = ErrorData.getInstance();				
+			return errorData.getData("7");
+		}
+		
 		
 	}
 	

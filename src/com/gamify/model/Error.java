@@ -2,14 +2,14 @@ package com.gamify.model;
 
 public class Error {
 
-	private int errorID;
+	private String errorID;
 	private String message;
 	private String link;
-	private int http_status;
+	private String http_status;
 	
 	public Error() {}
 	
-	public Error(int errorID, String message, String link, int http_status) {
+	public Error(String errorID, String message, String link, String http_status) {
 		super();
 		this.errorID = errorID;
 		this.message = message;
@@ -17,11 +17,11 @@ public class Error {
 		this.http_status = http_status;
 	}
 
-	public int getErrorID() {
+	public String getErrorID() {
 		return errorID;
 	}
 	
-	public void setErrorID(int errorID) {
+	public void setErrorID(String errorID) {
 		this.errorID = errorID;
 	}
 	
@@ -41,11 +41,11 @@ public class Error {
 		this.link = link;
 	}
 
-	public int getHttp_status() {
+	public String getHttp_status() {
 		return http_status;
 	}
 
-	public void setHttp_status(int http_status) {
+	public void setHttp_status(String http_status) {
 		this.http_status = http_status;
 	}
 }

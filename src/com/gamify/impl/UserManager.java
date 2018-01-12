@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.ws.rs.core.Response;
+
+import com.gamify.data.ErrorData;
 import com.gamify.data.UserData;
 import com.gamify.interf.InterfaceUser;
 import com.gamify.model.App;
@@ -27,11 +30,13 @@ public class UserManager implements InterfaceUser {
 	// Create new user
 
 	@Override
-	public void createUser(String userID, String password, String email) {
+	public Object createUser(String userID, String password, String email) {
 		User user = new User(userID, password, email);
 		
 		UserData userData = UserData.getInstance();				
 		userData.insertData(user);
+		// The user is created with success
+		return Response.ok().entity(userID + " created!").build();
 	}
 
 	// Get all users
@@ -53,14 +58,18 @@ public class UserManager implements InterfaceUser {
 	// Change user
 
 	@Override
-	public void changeUser(String userID, String newPassword, String newEmail) {
+	public Object changeUser(String userID, String newPassword, String newEmail) {
 
 		if (userID.equals(userAuth)) {
 			UserData userData = UserData.getInstance();				
 			userData.changeData(userID, newPassword, newEmail);
+			// The user is changed with success
+			return Response.ok().entity(userID + " changed!").build();
 		}
 		else {
-			// The user is not authorized to change another user - TO DO: Send error;
+			// The user is not authorized to change another user
+			ErrorData errorData = ErrorData.getInstance();				
+			return errorData.getData("3");
 		}
 
 	}
@@ -68,15 +77,19 @@ public class UserManager implements InterfaceUser {
 	// Remove user
 
 	@Override
-	public void removeUser(String userID) {
+	public Object removeUser(String userID) {
 
 
 		if (userID.equals(userAuth)) {
 			UserData userData = UserData.getInstance();				
 			userData.removeData(userID);
+			// The user is removed with success
+			return Response.ok().entity(userID + " removed!").build();
 		}
 		else {
-			// The user is not authorized to remove another user - TO DO: Send error	
+			// The user is not authorized to remove another user
+			ErrorData errorData = ErrorData.getInstance();	
+			return errorData.getData("3");
 		}
 
 	}

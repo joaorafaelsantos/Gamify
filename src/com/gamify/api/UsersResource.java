@@ -40,7 +40,8 @@ public class UsersResource {
 
 	// Get all users
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+
 	public List<User> getUsers() {
 
 		UserManager um = UserManager.getInstance();		
@@ -72,12 +73,10 @@ public class UsersResource {
 	// DELETE a specific user
 	@Path("/{userID}")
 	@DELETE	
-	public Response removeUser(@PathParam("userID") String userID) {
+	public Object removeUser(@PathParam("userID") String userID) {
 
 		UserManager um = UserManager.getInstance();		
-		um.removeUser(userID);
-
-		return Response.ok().entity("").build(); // Send response * TO DO *
+		return um.removeUser(userID);
 	}
 
 }
