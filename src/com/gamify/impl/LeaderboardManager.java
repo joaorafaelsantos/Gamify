@@ -3,9 +3,9 @@ package com.gamify.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import com.gamify.data.AppData;
+import com.gamify.data.LeaderboardData;
 import com.gamify.interf.InterfaceLeaderboard;
-import com.gamify.model.Achievement;
 import com.gamify.model.App;
 import com.gamify.model.Input;
 import com.gamify.model.Leaderboard;
@@ -14,34 +14,11 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 
 	String userAuth = "joaorsantos"; // To do - Change "joaorsantos" by the user who is logged
 
-	static List<Leaderboard> leaderboards = new ArrayList<Leaderboard>();
-
-	// Delete when connect to MongoDB
-	static List<App> apps = new ArrayList<App>();
-
 	static LeaderboardManager lm = null;
 
 	public static LeaderboardManager getInstance() {
 		if (lm == null) {
 			lm = new LeaderboardManager();
-			App a1 = new App("app1", "joaorsantos", "Gamify UI", "Marketing", "Lorem Ipsum"); 
-			App a2 = new App("app2", "rcosta", "randomp", "Entertainment", "Lorem Ipsum 2");
-			apps.add(a1);
-			apps.add(a2);
-
-			Leaderboard lb1 = new Leaderboard("lb1", "app1", "Most Active Users", "entertainment",
-					"most active users ranking");
-			Leaderboard lb2 = new Leaderboard("lb2", "app2", "Most Comments", "education",
-					"useres with more comments ranking");
-			
-			List<Input> inputs = new ArrayList<Input>();
-			
-			lb1.setInputs(inputs);
-			
-			
-			leaderboards.add(lb1);
-			leaderboards.add(lb2);
-
 		}
 		return lm;
 	}
@@ -49,17 +26,23 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 	// Create Leaderboard
 	@Override
 	public void createLeaderboard(String leaderboardID, String appID, String name, String type, String description) {
-		Leaderboard l = new Leaderboard(leaderboardID, appID, name, type, description);
+		Input input = new Input("", "");
 		List<Input> inputs = new ArrayList<Input>();
-		l.setInputs(inputs);
-		leaderboards.add(l);
+		inputs.add(input);
+		Leaderboard leaderboard = new Leaderboard(leaderboardID, appID, name, type, description, inputs);
+		LeaderboardData leaderboardData = LeaderboardData.getInstance();
+		leaderboardData.insertData(leaderboard);
 	}
 
 	// Get All Leaderboards
 
 	public List<Leaderboard> getLeaderboards(String appID) {
+		boolean exists = false;
 
-		boolean permission = false;
+		AppData appData = AppData.getInstance();
+		List<App> apps = appData.getAllData();
+
+		LeaderboardData leaderboardData = LeaderboardData.getInstance();
 
 		// Permissions for request
 
@@ -67,29 +50,14 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 			if (app.getAppID().equals(appID)) {
 
 				if (app.getUserID().equals(userAuth)) {
-					permission = true;
+
+					return leaderboardData.getData(appID);
+				} else {
+					// The user is not authorized to see leaderboards from another user - TO DO:
+					// Send error
 				}
 
 			}
-		}
-
-		if (permission == true) {
-			List<Leaderboard> filteredLeaderboards = new ArrayList<Leaderboard>();
-			for (Leaderboard leaderboard : leaderboards) {
-
-				// List only leaderboards from that app on all leaderboards available
-
-				if (leaderboard.getAppID().equals(appID)) {
-					filteredLeaderboards.add(leaderboard);
-				}
-			}
-			return filteredLeaderboards;
-
-		}
-
-		else if (permission == false) {
-			// The user is not authorized to see leaderboards from another user - TO DO:
-			// Send error
 		}
 		return null;
 	}
@@ -97,9 +65,12 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 	// Get specific leaderboard
 	@Override
 	public Leaderboard getLeaderboard(String appID, String leaderboardID) {
-
 		boolean exists = false;
-		boolean permission = false;
+
+		AppData appData = AppData.getInstance();
+		List<App> apps = appData.getAllData();
+
+		LeaderboardData leaderboardData = LeaderboardData.getInstance();
 
 		// Permissions for request
 
@@ -107,113 +78,94 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 			if (app.getAppID().equals(appID)) {
 
 				if (app.getUserID().equals(userAuth)) {
-					permission = true;
+
+					return leaderboardData.getSpecificData(appID, leaderboardID);
+				} else {
+					// The user is not authorized to see leaderboards from another user - TO DO:
+					// Send error
 				}
-			} 
-		}
 
-		if (permission == true) {
-			for (Leaderboard leaderboard : leaderboards) {
-
-				if (leaderboard.getLeaderboardID().equals(leaderboardID)) {
-					exists = true;
-					return leaderboard;
-				}
 			}
-
-			if (exists == false) {
-				// There are no leaderboard with that ID - TO DO: Send error
-			}
-		} else if (permission == false) {
-			// The user is not authorized to see leaderboards from another user - TO DO:
-			// Send error
 		}
 		return null;
 	}
 
 	// Change leaderboard
 	@Override
-	public void changeLeaderboard(String leaderboardID, String name, String type, String description) {
-		
-		boolean exists = false;
-		String checkUser = null;
-		Leaderboard tempLeaderboard = null;
-		int tempLeaderboardPosition = 0;
+	public void changeLeaderboard(String appID, String leaderboardID, String name, String type, String description) {
+		boolean appExists = false;
+		boolean permissions = true;
+		AppData appData = AppData.getInstance();
+		List<App> apps = appData.getAllData();
 
-		for (Leaderboard leaderboard : leaderboards) {
-			// Check if leaderboard exists
-			if (leaderboard.getLeaderboardID().equals(leaderboardID)) {
-				exists = true;
-				tempLeaderboard = leaderboard;
-				tempLeaderboardPosition = leaderboards.indexOf(leaderboard);
+		LeaderboardData leaderboardData = LeaderboardData.getInstance();
+
+		for (App app : apps) {
+			// Check if app exists
+			if (app.getAppID().equals(appID) && app.getUserID().equals(userAuth)) {
+				appExists = true;
+				permissions = true;
+				break;
 			}
 		}
-		
-		if (exists == true) {
-			// Check if the user have permission to change the leaderboard
-			for (App app : apps) {
-				if (tempLeaderboard.getAppID().equals(app.getAppID())) {
-					checkUser = app.getUserID();
-				}
-			}
 
-			if (checkUser.equals(userAuth)) {
-				Leaderboard newLeaderboard = new Leaderboard(leaderboardID, tempLeaderboard.getAppID(), name, type, description);
-				int i = tempLeaderboardPosition;
-				leaderboards.set(i, newLeaderboard);
+		if (!appExists) {
+			// SEND APP NOT EXIST - ERROR
+		} else if (appExists && permissions) {
+			Object leaderboard = leaderboardData.getSpecificData(appID, leaderboardID);
+
+			if (leaderboard == null) {
+				// SEND LEADERBOARD NOT EXIST - ERROR
 			} else {
-				// The user is not authorized to change the leaderboards from another user - TO
-				// DO: Send error
+				leaderboardData.changeData(appID, leaderboardID, name, type, description);
 			}
-		}
-		else if (exists == false) {
-			// There are no leaderboard with that ID - TO DO: Send error
 		}
 	}
 
 	// Remove Leaderboard
 	@Override
-	public void removeLeaderboard(String leaderboardID) {
-		boolean exists = false;
-		String checkUser = null;
-		Leaderboard tempLeaderboard = null;
-		
-		for (Leaderboard leaderboard : leaderboards) {
-			// Check if leaderboard exists
-			if (leaderboard.getLeaderboardID().equals(leaderboardID)) {
-				exists = true;
-				tempLeaderboard = leaderboard;
-				
-			}
-		}
-		
-		if (exists == true) {
-			// Check if the user have permission to change the leaderboard
-			for (App app : apps) {
-				if (tempLeaderboard.getAppID().equals(app.getAppID())) {
-					checkUser = app.getUserID();
-				}
-			}
+	public void removeLeaderboard(String appID, String leaderboardID) {
+		boolean appExists = false;
+		boolean permissions = true;
+		AppData appData = AppData.getInstance();
+		List<App> apps = appData.getAllData();
 
-			if (checkUser.equals(userAuth)) {
-				leaderboards.remove(tempLeaderboard);
-			} else {
-				// The user is not authorized to change the leaderboards from another user - TO
-				// DO: Send error
+		LeaderboardData leaderboardData = LeaderboardData.getInstance();
+
+		for (App app : apps) {
+			// Check if app exists
+			if (app.getAppID().equals(appID) && app.getUserID().equals(userAuth)) {
+				appExists = true;
+				permissions = true;
+				break;
 			}
 		}
-		else if (exists == false) {
-			// There are no leaderboard with that ID - TO DO: Send error
+
+		if (!appExists) {
+			// SEND APP NOT EXIST - ERROR
+		} else if (appExists && permissions) {
+			Object leaderboard = leaderboardData.getSpecificData(appID, leaderboardID);
+
+			if (leaderboard == null) {
+				// SEND LEADERBOARD NOT EXIST - ERROR
+			} else {
+				leaderboardData.removeData(appID, leaderboardID);
+			}
 		}
 	}
 
 	// Submit inputs
 
-	public Leaderboard inputsLeaderboards(String appID, String leaderboardID, String name, String score) {
+	public void addInputs(String appID, String leaderboardID, String name, String score) {
 
 		boolean permission = false;
 		boolean exists = false;
-		
+		boolean added = false;
+
+		AppData appData = AppData.getInstance();
+		List<App> apps = appData.getAllData();
+
+		LeaderboardData leaderboardData = LeaderboardData.getInstance();
 
 		// Permissions for request
 
@@ -223,85 +175,63 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 				if (app.getUserID().equals(userAuth)) {
 					permission = true;
 				}
-			} 
+			}
 		}
 
 		if (permission == true) {
 
-			for (Leaderboard leaderboard : leaderboards) {
+			Leaderboard leaderboard = leaderboardData.getSpecificData(appID, leaderboardID);
 
-				if (leaderboard.getLeaderboardID().equals(leaderboardID)) {
-					exists = true;
-					
-					
-					List<Input> inputs = new ArrayList<Input>(leaderboard.getInputs());
-					
-					Input input = new Input(name,score);
-					inputs.add(input);
-					leaderboard.setInputs(inputs);
-					
+			if (leaderboard == null) {
+				// SEND LEADERBOARD NOT EXIST - ERROR
+			} else {
+				exists = true;
+
+				List<Input> inputs = new ArrayList<Input>(leaderboard.getInputs());
+
+				for (Input input : inputs) {
+					if (input.getName().equals(name)) {
+						input.setScore(score);
+						added = true;
+					}
 				}
+
+				if (!added) {
+					Input input = new Input(name, score);
+					if (input.getName().equals("") && input.getScore().equals("")) {
+						inputs.clear();
+					}
+					inputs.add(input);
+				}
+
+				leaderboard.setInputs(inputs);
+				leaderboardData.inputData(appID, leaderboardID, leaderboard);
+
 			}
 
+			if (exists == false) {
+				// There are no leaderboard with that ID - TO DO: Send error
+			} else if (permission == false) {
+				// The user is not authorized to see leaderboards from another user - TO DO:
+				// Send error
+			}
 		}
-
-		else if (permission == false) {
-			// The user is not authorized to change leaderboard from another user - TO DO:
-			// Send error
-		}
-		if (exists == false) {
-			// There are no leaderboard with that ID - TO DO: Send error
-		}
-		return null;
 
 	}
 
 	// RESETS
 
-	public void resetLeaderBoardScore(String appID, String leaderboardID) {
+	public void resetLeaderboardScore(String appID, String leaderboardID) {
 
 		boolean permission = false;
 		boolean exists = false;
 
-		
+		AppData appData = AppData.getInstance();
+		List<App> apps = appData.getAllData();
+
+		LeaderboardData leaderboardData = LeaderboardData.getInstance();
 
 		// Permissions for request
-
-				for (App app : apps) {
-					if (app.getAppID().equals(appID)) {
-
-						if (app.getUserID().equals(userAuth)) {
-							permission = true;
-						}
-					} 
-				}
-
-		if (permission == true) {
-
-			// TO:DO
-			// iterar sobre o arraylist leaderboard.getInputs() score = 0;
-			//
-			//
-
-		}
-
-		else if (permission == false) {
-			// The user is not authorized to reset leaderboard from another user - TO DO:
-			// Send error
-		}
-		if (exists == false) {
-			// There are no leaderboard with that ID - TO DO: Send error
-		}
-
-	}
-
-	public void resetLeaderBoardTotal(String appID, String leaderboardID) {
-
-		boolean permission = false;
-		boolean exists = false;
-
-		// Permissions for request
-
 
 		for (App app : apps) {
 			if (app.getAppID().equals(appID)) {
@@ -309,32 +239,84 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 				if (app.getUserID().equals(userAuth)) {
 					permission = true;
 				}
-			} 
+			}
 		}
 
 		if (permission == true) {
 
-			for (Leaderboard leaderboard : leaderboards) {
-				if (leaderboard.getLeaderboardID().equals(leaderboardID)) {
-					exists = true;
+			Leaderboard leaderboard = leaderboardData.getSpecificData(appID, leaderboardID);
 
-					List<Input> inputs = new ArrayList<Input>();
-					
-					leaderboard.setInputs(inputs);
+			if (leaderboard == null) {
+				// SEND LEADERBOARD NOT EXIST - ERROR
+			} else {
+				exists = true;
 
+				List<Input> inputs = new ArrayList<Input>(leaderboard.getInputs());
+
+				for (Input input : inputs) {
+					input.setScore("0");
 				}
+				leaderboard.setInputs(inputs);
+				leaderboardData.inputData(appID, leaderboardID, leaderboard);
 
 			}
 
+			if (exists == false) {
+				// There are no leaderboard with that ID - TO DO: Send error
+			} else if (permission == false) {
+				// The user is not authorized to see leaderboards from another user - TO DO:
+				// Send error
+			}
 		}
 
-		else if (permission == false) {
-			// The user is not authorized to reset leaderboard from another user - TO DO:
-			// Send error
-		}
-		if (exists == false) {
-			// There are no leaderboard with that ID - TO DO: Send error
-		}
 	}
 
+	public void resetLeaderboardTotal(String appID, String leaderboardID) {
+
+		boolean permission = false;
+		boolean exists = false;
+
+		AppData appData = AppData.getInstance();
+		List<App> apps = appData.getAllData();
+
+		LeaderboardData leaderboardData = LeaderboardData.getInstance();
+
+		// Permissions for request
+
+		for (App app : apps) {
+			if (app.getAppID().equals(appID)) {
+
+				if (app.getUserID().equals(userAuth)) {
+					permission = true;
+				}
+			}
+		}
+
+		if (permission == true) {
+
+			Leaderboard leaderboard = leaderboardData.getSpecificData(appID, leaderboardID);
+
+			if (leaderboard == null) {
+				// SEND LEADERBOARD NOT EXIST - ERROR
+			} else {
+				exists = true;
+
+				List<Input> inputs = new ArrayList<Input>();
+				Input input = new Input("", "");
+				inputs.add(input);
+
+				leaderboard.setInputs(inputs);
+				leaderboardData.inputData(appID, leaderboardID, leaderboard);
+
+			}
+
+			if (exists == false) {
+				// There are no leaderboard with that ID - TO DO: Send error
+			} else if (permission == false) {
+				// The user is not authorized to see leaderboards from another user - TO DO:
+				// Send error
+			}
+		}
+
+	}
 }

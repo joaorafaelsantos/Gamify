@@ -74,9 +74,9 @@ public class LeaderboardsResource {
 	@Path("/{leaderboardID}")
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
-	public Response inputsLeaderboards(@PathParam("appID") String appID,@PathParam("leaderboardID") String leaderboardID, @FormParam("name") String name, @FormParam("score") String score) {
+	public Response addInputs(@PathParam("appID") String appID, @PathParam("leaderboardID") String leaderboardID, @FormParam("name") String name, @FormParam("score") String score) {
 		LeaderboardManager lm = LeaderboardManager.getInstance();
-		lm.inputsLeaderboards(appID,leaderboardID,name,score);
+		lm.addInputs(appID,leaderboardID,name,score);
 		return Response.ok().entity("").build();
 		
 		
@@ -87,10 +87,10 @@ public class LeaderboardsResource {
 	@PUT
 	@Consumes("application/x-www-form-urlencoded")
 	
-	public Response changeLeaderboard(@PathParam("leaderboardID") String leaderboardID, @FormParam("name") String name, @FormParam("type") String type, @FormParam("description") String description) {
+	public Response changeLeaderboard(@PathParam("appID") String appID, @PathParam("leaderboardID") String leaderboardID, @FormParam("name") String name, @FormParam("type") String type, @FormParam("description") String description) {
 
 		LeaderboardManager lm = LeaderboardManager.getInstance();	
-		lm.changeLeaderboard(leaderboardID, name,type, description);
+		lm.changeLeaderboard(appID, leaderboardID, name,type, description);
 
 		return Response.ok().entity("").build(); // Send response * TO DO *
 	}
@@ -98,10 +98,10 @@ public class LeaderboardsResource {
 	//DELETE a specific leaderboard
 	@Path("/{leaderboardID}")
 	@DELETE	
-	public Response removeLeaderboard(@PathParam("leaderboardID") String leaderboardID) {
+	public Response removeLeaderboard(@PathParam("appID") String appID, @PathParam("leaderboardID") String leaderboardID) {
 
 		LeaderboardManager lm = LeaderboardManager.getInstance();	
-		lm.removeLeaderboard(leaderboardID);
+		lm.removeLeaderboard(appID, leaderboardID);
 
 		return Response.ok().entity("").build(); // Send response * TO DO *
 	}
@@ -115,7 +115,7 @@ public class LeaderboardsResource {
 	public void resetLeaderBoardScore(@PathParam("appID") String appID, @PathParam("leaderboardID") String leaderboardID) {
 
 		LeaderboardManager lm = LeaderboardManager.getInstance();		
-		lm.resetLeaderBoardScore(appID, leaderboardID);
+		lm.resetLeaderboardScore(appID, leaderboardID);
 	}
 	
 	@Path("/{leaderboardID}/reset/total")
@@ -124,7 +124,7 @@ public class LeaderboardsResource {
 	public Response resetLeaderBoardTotal(@PathParam("appID") String appID, @PathParam("leaderboardID") String leaderboardID) {
 
 		LeaderboardManager lm = LeaderboardManager.getInstance();		
-		lm.resetLeaderBoardScore(appID, leaderboardID);
+		lm.resetLeaderboardTotal(appID, leaderboardID);
 		return Response.ok().entity("").build();
 	}
 

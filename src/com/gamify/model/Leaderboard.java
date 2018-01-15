@@ -1,5 +1,6 @@
 package com.gamify.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Leaderboard {
@@ -9,18 +10,18 @@ public class Leaderboard {
 	private String name;
 	private String type;
 	private String description;
-	private List<Input> inputs;
+	private List<Input> inputs = new ArrayList<Input>();
 	
 	public Leaderboard() {}
 
-	public Leaderboard(String leaderboardID, String appID, String name, String type, String description) {
+	public Leaderboard(String leaderboardID, String appID, String name, String type, String description, List<Input> inputs) {
 		super();
 		this.leaderboardID = leaderboardID;
 		this.appID = appID;
 		this.name = name;
 		this.type = type;
 		this.description = description;
-		this.inputs = null;
+		this.inputs = inputs;
 	}
 
 
