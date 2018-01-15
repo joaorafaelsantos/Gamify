@@ -25,6 +25,7 @@ public class AuthResource {
 	public Response auth(@FormParam("username") String username, @FormParam("password") String password) {
 		AuthManager am = AuthManager.getInstance();	
 		boolean validate;
+		
 		// Validate user data in db store
 		
 		validate= am.getAuth(username,password);
