@@ -1,6 +1,7 @@
 package com.gamify.model;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Achievement {
@@ -13,12 +14,12 @@ public class Achievement {
 	private String goal;
 	private String type;
 	private String description;
-	private List<Input> inputs;
+	private List<Input> inputs = new ArrayList<Input>();
 	
 	public Achievement() {}
 	
 	public Achievement(String achievementID, String appID, String name, String structure, String reward, String goal,
-			String type, String description) {
+			String type, String description, List<Input> inputs) {
 		super();
 		this.achievementID = achievementID;
 		this.appID = appID;
@@ -28,7 +29,7 @@ public class Achievement {
 		this.goal = goal;
 		this.type = type;
 		this.description = description;
-		this.inputs=null;
+		this.inputs = inputs;
 	}
 	public String getAchievementID() {
 		return achievementID;

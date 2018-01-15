@@ -40,7 +40,7 @@ public class UsersResource {
 
 	// Get all users
 	@GET
-	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@Produces(MediaType.APPLICATION_JSON)
 
 	public List<User> getUsers() {
 

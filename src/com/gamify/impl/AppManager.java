@@ -12,8 +12,6 @@ public class AppManager implements InterfaceApp {
 
 	String userAuth = "joaorsantos"; // To change when add auth (token)
 
-	static List<App> apps = new ArrayList<App>();
-
 	static AppManager am = null;
 
 	public static AppManager getInstance() {
@@ -71,7 +69,7 @@ public class AppManager implements InterfaceApp {
 
 		boolean exists = false;
 		AppData appData = AppData.getInstance();		
-		apps = appData.getAllData();
+		List<App> apps = appData.getAllData();
 
 		for(App app:apps) {
 			// Check if app exists
@@ -103,7 +101,7 @@ public class AppManager implements InterfaceApp {
 		
 		boolean exists = false;
 		AppData appData = AppData.getInstance();		
-		apps = appData.getAllData();
+		List<App> apps = appData.getAllData();
 
 		for(App app:apps) {
 			// Check if app exists
