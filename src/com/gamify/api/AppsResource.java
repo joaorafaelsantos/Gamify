@@ -10,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -32,10 +33,10 @@ public class AppsResource {
 	@Consumes("application/x-www-form-urlencoded")
 	public Response createApp(@FormParam("appID") String appID, @FormParam("appName") String appName,
 			@FormParam("type") String type, @FormParam("description") String description,
-			@FormParam("token") String token, @Context UriInfo uriInfo) {
+			@FormParam("apiKey") String apiKey, @Context UriInfo uriInfo) {
 		
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
 
 		AppManager am = AppManager.getInstance();
 
@@ -49,10 +50,10 @@ public class AppsResource {
 	// Get all apps
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Object getApps(@PathParam("userID") String userID, @FormParam("token") String token) {
+	public Object getApps(@PathParam("userID") String userID, @QueryParam("apiKey") String apiKey) {
 		
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
 
 		AppManager am = AppManager.getInstance();
 		return am.getApps(userID, userAuth);
@@ -63,10 +64,10 @@ public class AppsResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Object getApp(@PathParam("userID") String userID, @PathParam("appID") String appID,
-			@FormParam("token") String token) {
+			@QueryParam("apiKey") String apiKey) {
 		
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
 
 		AppManager am = AppManager.getInstance();
 		return am.getApp(userID, appID, userAuth);
@@ -78,10 +79,10 @@ public class AppsResource {
 	@Consumes("application/x-www-form-urlencoded")
 	public Response changeApp(@PathParam("appID") String appID, @FormParam("appName") String appName,
 			@FormParam("type") String type, @FormParam("description") String description,
-			@FormParam("token") String token) {
+			@FormParam("apiKey") String apiKey) {
 		
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
 
 		AppManager am = AppManager.getInstance();
 		am.changeApp(appID, appName, type, description, userAuth);
@@ -92,10 +93,10 @@ public class AppsResource {
 	// DELETE a specific app
 	@Path("/{appID}")
 	@DELETE
-	public Response removeUser(@PathParam("appID") String appID, @FormParam("token") String token) {
+	public Response removeUser(@PathParam("appID") String appID, @QueryParam("apiKey") String apiKey) {
 		
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
 
 		AppManager am = AppManager.getInstance();
 		am.removeApp(appID, userAuth);

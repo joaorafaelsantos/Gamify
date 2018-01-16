@@ -10,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -42,9 +43,9 @@ public class UsersResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 
-	public List<User> getUsers(@FormParam("token") String token) {
+	public List<User> getUsers(@QueryParam("apiKey") String apiKey) {
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody()
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody()
 				.get("user");
 
 		UserManager um = UserManager.getInstance();
@@ -55,9 +56,9 @@ public class UsersResource {
 	@Path("/{userID}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<User> getUser(@PathParam("userID") String userID, @FormParam("token") String token) {
+	public List<User> getUser(@PathParam("userID") String userID, @QueryParam("apiKey") String apiKey) {
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody()
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody()
 				.get("user");
 
 		UserManager um = UserManager.getInstance();
@@ -69,9 +70,9 @@ public class UsersResource {
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
 	public Response changeUser(@PathParam("userID") String userID, @FormParam("password") String password,
-			@FormParam("email") String email, @FormParam("token") String token) {
+			@FormParam("email") String email, @QueryParam("apiKey") String apiKey) {
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody()
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody()
 				.get("user");
 
 		UserManager um = UserManager.getInstance();
@@ -83,9 +84,9 @@ public class UsersResource {
 	// DELETE a specific user
 	@Path("/{userID}")
 	@DELETE
-	public Object removeUser(@PathParam("userID") String userID, @FormParam("token") String token) {
+	public Object removeUser(@PathParam("userID") String userID, @QueryParam("apiKey") String apiKey) {
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody()
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody()
 				.get("user");
 
 		UserManager um = UserManager.getInstance();
