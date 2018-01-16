@@ -28,102 +28,85 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 public class AppData {
 	static AppData ad = null;
 	static MongoCollection<App> colApp;
-	
+
 	public static AppData getInstance() {
-		if(ad == null) {
-			ad = new AppData();			
-			
-			CodecRegistry pojoCodecRegistry = fromRegistries(MongoClient.getDefaultCodecRegistry(), fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-			MongoClient mongoClient = new MongoClient("localhost", MongoClientOptions.builder().codecRegistry(pojoCodecRegistry).build());
+		if (ad == null) {
+			ad = new AppData();
+
+			CodecRegistry pojoCodecRegistry = fromRegistries(MongoClient.getDefaultCodecRegistry(),
+					fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+			MongoClient mongoClient = new MongoClient("localhost",
+					MongoClientOptions.builder().codecRegistry(pojoCodecRegistry).build());
 			MongoDatabase dbGame = mongoClient.getDatabase("Gamify");
 			colApp = dbGame.getCollection("Apps", App.class);
 		}
 		return ad;
 	}
-	
-	
-	public void insertData(App app) {			
-			colApp.insertOne(app);
-	}	
+
+	public void insertData(App app) {
+		colApp.insertOne(app);
+	}
 
 	public List<App> getAllData() {
-	List<App> apps = new ArrayList<App>();
-	
-	Block<App> printBlock = new Block<App>() {
-	    @Override
-	    public void apply(final App app) {
-	        apps.add(app);
-	    }
-	};
-	
-	colApp.find().forEach(printBlock);
-
-	return apps;
-}
-	public Object getData(String userRequested) {
-		
 		List<App> apps = new ArrayList<App>();
-		
+
 		Block<App> printBlock = new Block<App>() {
-		    @Override
-		    public void apply(final App app) {
-		        apps.add(app);
-		    }
+			@Override
+			public void apply(final App app) {
+				apps.add(app);
+			}
 		};
-		
+
+		colApp.find().forEach(printBlock);
+
+		return apps;
+	}
+
+	public List<App> getData(String userRequested) {
+
+		List<App> apps = new ArrayList<App>();
+
+		Block<App> printBlock = new Block<App>() {
+			@Override
+			public void apply(final App app) {
+				apps.add(app);
+			}
+		};
+
 		colApp.find(eq("userID", userRequested)).forEach(printBlock);
 
 		return apps;
-		
+
 	}
-	
-	public Object getSpecificData(String userRequested, String appID) {	
-		
+
+	public App getSpecificData(String userRequested, String appID) {
+
 		final List<App> apps = new ArrayList<App>();
-		
+
 		Block<App> printBlock = new Block<App>() {
 			@Override
-		    public void apply(final App app) {
-		    	apps.add(app);
-		    }
+			public void apply(final App app) {
+				apps.add(app);
+			}
 		};
-		Bson filter = Filters.and(
-                Filters.eq("appID", appID), 
-                Filters.eq("userID", userRequested)
-                );
-		
+		Bson filter = Filters.and(Filters.eq("appID", appID), Filters.eq("userID", userRequested));
+
 		colApp.find(filter).forEach(printBlock);
-		
-		if (apps.size() != 0) {
-			return apps;
-		}
-		else {
-			// There are no app with that ID
-			ErrorData errorData = ErrorData.getInstance();				
-			return errorData.getData("7");
-		}
-		
-		
+
+		return apps.get(0);
 	}
-	
+
 	public void changeData(String appID, String appName, String type, String description) {
 		Document setData = new Document();
-        setData.append("appName", appName).append("type", type).append("description", description);
-        Document update = new Document();
-        update.append("$set", setData);
-    
-		colApp.updateOne(eq("appID",appID), update);
+		setData.append("appName", appName).append("type", type).append("description", description);
+		Document update = new Document();
+		update.append("$set", setData);
+
+		colApp.updateOne(eq("appID", appID), update);
 	}
 
 	public void removeData(String appID) {
-		colApp.deleteOne(eq("appID", appID));		
+		colApp.deleteOne(eq("appID", appID));
 	}
 
-
-	
-	
-	
-	
-	
 }
-

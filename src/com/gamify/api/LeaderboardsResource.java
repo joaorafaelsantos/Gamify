@@ -17,13 +17,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import com.gamify.impl.AuthManager;
 import com.gamify.impl.LeaderboardManager;
-
 
 import com.gamify.model.Leaderboard;
 
-
-
+import io.jsonwebtoken.Jwts;
 
 @Path("/apps/{appID}/leaderboards")
 public class LeaderboardsResource {
@@ -33,102 +32,124 @@ public class LeaderboardsResource {
 	// Create new leaderboard
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
-	public Response createAchievement(
-			@FormParam("leaderboardID") String leaderboardID,
-			@PathParam("appID") String appID,
-			@FormParam("name") String name,
-			@FormParam("type") String type,
-			@FormParam("description") String description,
-			@Context UriInfo uriInfo)  {
-
+	public Response createAchievement(@FormParam("leaderboardID") String leaderboardID,
+			@PathParam("appID") String appID, @FormParam("name") String name, @FormParam("type") String type,
+			@FormParam("description") String description, @FormParam("token") String token, @Context UriInfo uriInfo) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
+		
 		LeaderboardManager lm = LeaderboardManager.getInstance();
-		
-				lm.createLeaderboard(leaderboardID, appID, name, type,description);
-		
-				UriBuilder builder = uriInfo.getAbsolutePathBuilder();	
-				builder.path(leaderboardID);
-				return Response.created(builder.build()).build();
-	}
 
+		lm.createLeaderboard(leaderboardID, appID, name, type, description, token);
+
+		UriBuilder builder = uriInfo.getAbsolutePathBuilder();
+		builder.path(leaderboardID);
+		return Response.created(builder.build()).build();
+	}
 
 	// Get all leaderboards
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Leaderboard> getLeaderboards(@PathParam("appID") String appID) {
+	public List<Leaderboard> getLeaderboards(@PathParam("appID") String appID, @FormParam("token") String token) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
 
 		LeaderboardManager lm = LeaderboardManager.getInstance();
-		return lm.getLeaderboards(appID);
+		return lm.getLeaderboards(appID, userAuth);
 	}
 
 	// GET a specific leaderboard
 	@Path("/{leaderboardID}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Leaderboard getLeaderboard(@PathParam("appID") String appID, @PathParam("leaderboardID") String leaderboardID) {
+	public Leaderboard getLeaderboard(@PathParam("appID") String appID,
+			@PathParam("leaderboardID") String leaderboardID, @FormParam("token") String token) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
 
 		LeaderboardManager lm = LeaderboardManager.getInstance();
-		return lm.getLeaderboard(appID,leaderboardID);
+		return lm.getLeaderboard(appID, leaderboardID, userAuth);
 	}
 
 	// Add Inputs to leaderboard
 	@Path("/{leaderboardID}")
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
-	public Response addInputs(@PathParam("appID") String appID, @PathParam("leaderboardID") String leaderboardID, @FormParam("name") String name, @FormParam("score") String score) {
+	public Response addInputs(@PathParam("appID") String appID, @PathParam("leaderboardID") String leaderboardID,
+			@FormParam("name") String name, @FormParam("score") String score, @FormParam("token") String token) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
+		
 		LeaderboardManager lm = LeaderboardManager.getInstance();
-		lm.addInputs(appID,leaderboardID,name,score);
+		lm.addInputs(appID, leaderboardID, name, score, userAuth);
 		return Response.ok().entity("").build();
-		
-		
+
 	}
-	
+
 	// Change a specific leaderboard
 	@Path("/{leaderboardID}")
 	@PUT
 	@Consumes("application/x-www-form-urlencoded")
-	
-	public Response changeLeaderboard(@PathParam("appID") String appID, @PathParam("leaderboardID") String leaderboardID, @FormParam("name") String name, @FormParam("type") String type, @FormParam("description") String description) {
 
-		LeaderboardManager lm = LeaderboardManager.getInstance();	
-		lm.changeLeaderboard(appID, leaderboardID, name,type, description);
+	public Response changeLeaderboard(@PathParam("appID") String appID,
+			@PathParam("leaderboardID") String leaderboardID, @FormParam("name") String name,
+			@FormParam("type") String type, @FormParam("description") String description, @FormParam("token") String token) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
+
+		LeaderboardManager lm = LeaderboardManager.getInstance();
+		lm.changeLeaderboard(appID, leaderboardID, name, type, description, userAuth);
 
 		return Response.ok().entity("").build(); // Send response * TO DO *
 	}
-	
-	//DELETE a specific leaderboard
+
+	// DELETE a specific leaderboard
 	@Path("/{leaderboardID}")
-	@DELETE	
-	public Response removeLeaderboard(@PathParam("appID") String appID, @PathParam("leaderboardID") String leaderboardID) {
+	@DELETE
+	public Response removeLeaderboard(@PathParam("appID") String appID,
+			@PathParam("leaderboardID") String leaderboardID, @FormParam("token") String token) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
 
-		LeaderboardManager lm = LeaderboardManager.getInstance();	
-		lm.removeLeaderboard(appID, leaderboardID);
+		LeaderboardManager lm = LeaderboardManager.getInstance();
+		lm.removeLeaderboard(appID, leaderboardID, userAuth);
 
 		return Response.ok().entity("").build(); // Send response * TO DO *
 	}
-	
-	
-	// Resets leaderboards 
-	
+
+	// Resets leaderboards
+
 	@Path("/{leaderboardID}/reset/score")
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
-	public void resetLeaderBoardScore(@PathParam("appID") String appID, @PathParam("leaderboardID") String leaderboardID) {
+	public void resetLeaderBoardScore(@PathParam("appID") String appID,
+			@PathParam("leaderboardID") String leaderboardID, @FormParam("token") String token) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
 
-		LeaderboardManager lm = LeaderboardManager.getInstance();		
-		lm.resetLeaderboardScore(appID, leaderboardID);
+		LeaderboardManager lm = LeaderboardManager.getInstance();
+		lm.resetLeaderboardScore(appID, leaderboardID, userAuth);
 	}
-	
+
 	@Path("/{leaderboardID}/reset/total")
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
-	public Response resetLeaderBoardTotal(@PathParam("appID") String appID, @PathParam("leaderboardID") String leaderboardID) {
+	public Response resetLeaderBoardTotal(@PathParam("appID") String appID,
+			@PathParam("leaderboardID") String leaderboardID, @FormParam("token") String token) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
 
-		LeaderboardManager lm = LeaderboardManager.getInstance();		
-		lm.resetLeaderboardTotal(appID, leaderboardID);
+		LeaderboardManager lm = LeaderboardManager.getInstance();
+		lm.resetLeaderboardTotal(appID, leaderboardID, userAuth);
 		return Response.ok().entity("").build();
 	}
 
 }
-
-
-

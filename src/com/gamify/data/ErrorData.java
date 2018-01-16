@@ -56,7 +56,7 @@ public class ErrorData {
 		
 	}
 	
-	public List<Error> getData(String errorID) {	
+	public Error getData(String errorID) {	
 		
 		final List<Error> errors = new ArrayList<Error>();
 		
@@ -68,7 +68,7 @@ public class ErrorData {
 		
 		colError.find(eq("errorID",errorID)).forEach(printBlock);
 		
-		return errors;
+		return errors.get(0);
 		
 	}
 	

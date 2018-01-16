@@ -10,12 +10,10 @@ import com.gamify.model.App;
 
 public class AppManager implements InterfaceApp {
 
-	String userAuth = "joaorsantos"; // To change when add auth (token)
-
 	static AppManager am = null;
 
 	public static AppManager getInstance() {
-		if(am == null) {
+		if (am == null) {
 			am = new AppManager();
 		}
 		return am;
@@ -24,23 +22,24 @@ public class AppManager implements InterfaceApp {
 	// Create new app
 
 	@Override
-	public void createApp(String appID, String userID, String appName, String type, String description) {
+	public void createApp(String appID, String userID, String appName, String type, String description,
+			String userAuth) {
 		App app = new App(appID, userID, appName, type, description);
-		AppData appData = AppData.getInstance();				
+		AppData appData = AppData.getInstance();
 		appData.insertData(app);
 	}
 
 	// Get all apps
 
 	@Override
-	public Object getApps(String userRequested) {
+	public Object getApps(String userRequested, String userAuth) {
+
 		if (userRequested.equals(userAuth)) {
-			AppData appData = AppData.getInstance();				
+			AppData appData = AppData.getInstance();
 			return appData.getData(userRequested);
-		}
-		else {
+		} else {
 			// The user is not authorized to see apps from another user
-			ErrorData errorData = ErrorData.getInstance();				
+			ErrorData errorData = ErrorData.getInstance();
 			return errorData.getData("3");
 		}
 
@@ -49,14 +48,13 @@ public class AppManager implements InterfaceApp {
 	// Get specific app
 
 	@Override
-	public Object getApp(String userRequested, String appID) {
+	public Object getApp(String userRequested, String appID, String userAuth) {
 		if (userRequested.equals(userAuth)) {
-			AppData appData = AppData.getInstance();				
+			AppData appData = AppData.getInstance();
 			return appData.getSpecificData(userRequested, appID);
-		}
-		else {
+		} else {
 			// The user is not authorized to see apps from another user
-			ErrorData errorData = ErrorData.getInstance();				
+			ErrorData errorData = ErrorData.getInstance();
 			return errorData.getData("3");
 		}
 
@@ -65,31 +63,30 @@ public class AppManager implements InterfaceApp {
 	// Change app
 
 	@Override
-	public void changeApp(String appID, String appName, String type, String description) {
+	public void changeApp(String appID, String appName, String type, String description, String userAuth) {
 
 		boolean exists = false;
-		AppData appData = AppData.getInstance();		
+		AppData appData = AppData.getInstance();
 		List<App> apps = appData.getAllData();
 
-		for(App app:apps) {
+		for (App app : apps) {
 			// Check if app exists
 			if (app.getAppID().equals(appID)) {
 				exists = true;
 				// Check if the user have permission to change the app
-				if (app.getUserID().equals(userAuth) ) {
+				if (app.getUserID().equals(userAuth)) {
 					appData.changeData(appID, appName, type, description);
-				}
-				else {
+				} else {
 					// The user is not authorized to change the apps from another user
-					ErrorData errorData = ErrorData.getInstance();				
+					ErrorData errorData = ErrorData.getInstance();
 					errorData.getData("3");
 				}
 			}
 		}
-		
+
 		if (exists == false) {
 			// There are no app with that ID
-			ErrorData errorData = ErrorData.getInstance();				
+			ErrorData errorData = ErrorData.getInstance();
 			errorData.getData("7");
 		}
 	}
@@ -97,35 +94,32 @@ public class AppManager implements InterfaceApp {
 	// Remove app
 
 	@Override
-	public void removeApp(String appID) {
-		
+	public void removeApp(String appID, String userAuth) {
+
 		boolean exists = false;
-		AppData appData = AppData.getInstance();		
+		AppData appData = AppData.getInstance();
 		List<App> apps = appData.getAllData();
 
-		for(App app:apps) {
+		for (App app : apps) {
 			// Check if app exists
 			if (app.getAppID().equals(appID)) {
 				exists = true;
 				// Check if the user have permission to change the app
-				if (app.getUserID().equals(userAuth) ) {
+				if (app.getUserID().equals(userAuth)) {
 					appData.removeData(appID);
-				}
-				else {
+				} else {
 					// The user is not authorized to change the apps from another user
-					ErrorData errorData = ErrorData.getInstance();				
+					ErrorData errorData = ErrorData.getInstance();
 					errorData.getData("3");
 				}
 			}
 		}
-		
+
 		if (exists == false) {
 			// There are no app with that ID
-			ErrorData errorData = ErrorData.getInstance();				
+			ErrorData errorData = ErrorData.getInstance();
 			errorData.getData("7");
 		}
 
-
+	}
 }
-}
-

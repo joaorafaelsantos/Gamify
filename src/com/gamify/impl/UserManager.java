@@ -14,14 +14,10 @@ import com.gamify.model.User;
 
 public class UserManager implements InterfaceUser {
 
-	String userAuth = "joaorsantos"; // To change when add auth (token)
-
-	static List<User> users = new ArrayList<User>();
-
 	static UserManager um = null;
 
 	public static UserManager getInstance() {
-		if(um == null) {
+		if (um == null) {
 			um = new UserManager();
 		}
 		return um;
@@ -31,9 +27,9 @@ public class UserManager implements InterfaceUser {
 
 	@Override
 	public Object createUser(String userID, String password, String email) {
+
 		User user = new User(userID, password, email);
-		
-		UserData userData = UserData.getInstance();				
+		UserData userData = UserData.getInstance();
 		userData.insertData(user);
 		// The user is created with success
 		return Response.ok().entity(userID + " created!").build();
@@ -42,33 +38,47 @@ public class UserManager implements InterfaceUser {
 	// Get all users
 
 	@Override
-	public List<User> getUsers() {
-		UserData userData = UserData.getInstance();				
-		return userData.getData();
+	public List<User> getUsers(String userAuth) {
+		if (userAuth != null) {
+			UserData userData = UserData.getInstance();
+			return userData.getData();
+		} else {
+			// Invalid login
+			ErrorData errorData = ErrorData.getInstance();
+			errorData.getData("5");
+		}
+		return null;
 	}
 
 	// Get specific user
 
 	@Override
-	public List<User> getUser(String userID) {
-		UserData userData = UserData.getInstance();				
-		return userData.getData(userID);
+	public List<User> getUser(String userID, String userAuth) {
+		
+		if (userAuth != null) {
+			UserData userData = UserData.getInstance();
+			return userData.getData(userID);
+		} else {
+			// Invalid login
+			ErrorData errorData = ErrorData.getInstance();
+			errorData.getData("5");
+		}
+		return null;
 	}
 
 	// Change user
 
 	@Override
-	public Object changeUser(String userID, String newPassword, String newEmail) {
+	public Object changeUser(String userID, String newPassword, String newEmail, String userAuth) {
 
 		if (userID.equals(userAuth)) {
-			UserData userData = UserData.getInstance();				
+			UserData userData = UserData.getInstance();
 			userData.changeData(userID, newPassword, newEmail);
 			// The user is changed with success
 			return Response.ok().entity(userID + " changed!").build();
-		}
-		else {
-			// The user is not authorized to change another user
-			ErrorData errorData = ErrorData.getInstance();				
+		} else {
+			// The current user is not authorized to change another user
+			ErrorData errorData = ErrorData.getInstance();
 			return errorData.getData("3");
 		}
 
@@ -77,22 +87,19 @@ public class UserManager implements InterfaceUser {
 	// Remove user
 
 	@Override
-	public Object removeUser(String userID) {
-
+	public Object removeUser(String userID, String userAuth) {
 
 		if (userID.equals(userAuth)) {
-			UserData userData = UserData.getInstance();				
+			UserData userData = UserData.getInstance();
 			userData.removeData(userID);
 			// The user is removed with success
 			return Response.ok().entity(userID + " removed!").build();
-		}
-		else {
-			// The user is not authorized to remove another user
-			ErrorData errorData = ErrorData.getInstance();	
+		} else {
+			// The current user is not authorized to remove another user
+			ErrorData errorData = ErrorData.getInstance();
 			return errorData.getData("3");
 		}
 
 	}
 
 }
-

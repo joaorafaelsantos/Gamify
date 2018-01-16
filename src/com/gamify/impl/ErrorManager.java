@@ -35,7 +35,7 @@ public class ErrorManager implements InterfaceError {
 		// Get specific user
 
 		@Override
-		public List<Error> getError(String errorID) {
+		public Error getError(String errorID) {
 			ErrorData errorData = ErrorData.getInstance();				
 			return errorData.getData(errorID);
 		}

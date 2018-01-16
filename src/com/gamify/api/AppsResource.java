@@ -17,77 +17,90 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import com.gamify.impl.AppManager;
+import com.gamify.impl.AuthManager;
 import com.gamify.impl.UserManager;
 import com.gamify.model.App;
 import com.gamify.model.User;
 
+import io.jsonwebtoken.Jwts;
+
 @Path("/users/{userID}/apps")
 public class AppsResource {
-
-	String userAuth = "joaorsantos"; // To change when add auth (token)
 
 	// Create new app
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
-	public Response createApp(
-			@FormParam("appID") String appID,
-			@FormParam("appName") String appName,
-			@FormParam("type") String type,
-			@FormParam("description") String description,
-			@Context UriInfo uriInfo) {
+	public Response createApp(@FormParam("appID") String appID, @FormParam("appName") String appName,
+			@FormParam("type") String type, @FormParam("description") String description,
+			@FormParam("token") String token, @Context UriInfo uriInfo) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
 
 		AppManager am = AppManager.getInstance();
 
-		am.createApp(appID, userAuth, appName, type, description);
+		am.createApp(appID, userAuth, appName, type, description, userAuth);
 
-		UriBuilder builder = uriInfo.getAbsolutePathBuilder();	
+		UriBuilder builder = uriInfo.getAbsolutePathBuilder();
 		builder.path(appID);
 		return Response.created(builder.build()).build();
 	}
 
-
 	// Get all apps
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Object getApps(@PathParam("userID") String userID) {
+	public Object getApps(@PathParam("userID") String userID, @FormParam("token") String token) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
 
-		AppManager am = AppManager.getInstance();		
-		return am.getApps(userID);
+		AppManager am = AppManager.getInstance();
+		return am.getApps(userID, userAuth);
 	}
 
 	// GET a specific app
 	@Path("/{appID}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Object getApp(@PathParam("userID") String userID, @PathParam("appID") String appID) {
+	public Object getApp(@PathParam("userID") String userID, @PathParam("appID") String appID,
+			@FormParam("token") String token) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
 
-		AppManager am = AppManager.getInstance();		
-		return am.getApp(userID,appID);
+		AppManager am = AppManager.getInstance();
+		return am.getApp(userID, appID, userAuth);
 	}
 
 	// Change a specific app
 	@Path("/{appID}")
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
-	public Response changeApp(@PathParam("appID") String appID, @FormParam("appName") String appName, @FormParam("type") String type, @FormParam("description") String description) {
+	public Response changeApp(@PathParam("appID") String appID, @FormParam("appName") String appName,
+			@FormParam("type") String type, @FormParam("description") String description,
+			@FormParam("token") String token) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
 
-		AppManager am = AppManager.getInstance();		
-		am.changeApp(appID, appName, type, description);
+		AppManager am = AppManager.getInstance();
+		am.changeApp(appID, appName, type, description, userAuth);
 
 		return Response.ok().entity("").build(); // Send response * TO DO *
 	}
 
-	//DELETE a specific app
+	// DELETE a specific app
 	@Path("/{appID}")
-	@DELETE	
-	public Response removeUser(@PathParam("appID") String appID) {
+	@DELETE
+	public Response removeUser(@PathParam("appID") String appID, @FormParam("token") String token) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
 
-		AppManager am = AppManager.getInstance();		
-		am.removeApp(appID);
+		AppManager am = AppManager.getInstance();
+		am.removeApp(appID, userAuth);
 
 		return Response.ok().entity("").build(); // Send response * TO DO *
 	}
 
 }
-
-

@@ -18,11 +18,11 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import com.gamify.impl.AchievementManager;
+import com.gamify.impl.AuthManager;
 import com.gamify.model.Achievement;
 import com.gamify.model.App;
 
-
-
+import io.jsonwebtoken.Jwts;
 
 @Path("/apps/{appID}/achievements")
 public class AchievementsResource {
@@ -32,81 +32,96 @@ public class AchievementsResource {
 	// Create new achievement
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
-	public Response createAchievement(
-			@FormParam("achievementID") String achievementID,
-			@PathParam("appID") String appID,
-			@FormParam("name") String name,
-			@FormParam("structure") String structure,
-			@FormParam("reward") String reward,
-			@FormParam("goal") String goal,
-			@FormParam("type") String type,
-			@FormParam("description") String description,
-			@Context UriInfo uriInfo) {
+	public Response createAchievement(@FormParam("achievementID") String achievementID,
+			@PathParam("appID") String appID, @FormParam("name") String name, @FormParam("structure") String structure,
+			@FormParam("reward") String reward, @FormParam("goal") String goal, @FormParam("type") String type,
+			@FormParam("description") String description, @FormParam("token") String token, @Context UriInfo uriInfo) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
 
 		AchievementManager am = AchievementManager.getInstance();
 
-		am.createAchievement(achievementID, appID, name, structure,reward, goal,type,description);
+		am.createAchievement(achievementID, appID, name, structure, reward, goal, type, description, token);
 
-		UriBuilder builder = uriInfo.getAbsolutePathBuilder();	
+		UriBuilder builder = uriInfo.getAbsolutePathBuilder();
 		builder.path(achievementID);
 		return Response.created(builder.build()).build();
 	}
 
-
 	// Get all achievements
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Object getAchievements(@PathParam("appID") String appID) {
+	public Object getAchievements(@PathParam("appID") String appID, @FormParam("token") String token) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
 
-		AchievementManager am = AchievementManager.getInstance();		
-		return am.getAchievements(appID);
+		AchievementManager am = AchievementManager.getInstance();
+		return am.getAchievements(appID, token);
 	}
 
 	// GET a specific achievement
 	@Path("/{achievementID}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Object getAchievement(@PathParam("appID") String appID, @PathParam("achievementID") String achievementID) {
+	public Object getAchievement(@PathParam("appID") String appID, @PathParam("achievementID") String achievementID,
+			@FormParam("token") String token) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
 
-		AchievementManager am = AchievementManager.getInstance();		
-		return am.getAchievement(appID,achievementID);
+		AchievementManager am = AchievementManager.getInstance();
+		return am.getAchievement(appID, achievementID, token);
 	}
 
 	// Add Inputs to achievement
 	@Path("/{achievementID}")
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
-	public Response addInputs(@PathParam("appID") String appID,@PathParam("achievementID") String achievementID, @FormParam("name") String name, @FormParam("score") String score) {
+	public Response addInputs(@PathParam("appID") String appID, @PathParam("achievementID") String achievementID,
+			@FormParam("name") String name, @FormParam("score") String score, @FormParam("token") String token) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
+		
 		AchievementManager am = AchievementManager.getInstance();
-		am.addInputs(appID,achievementID,name,score);
+		am.addInputs(appID, achievementID, name, score, token);
 		return Response.ok().entity("").build();
 	}
-	
+
 	// Change a specific achievement
 	@Path("/{achievementID}")
 	@PUT
 	@Consumes("application/x-www-form-urlencoded")
-	
-	public Response changeAchievement(@PathParam ("appID") String appID, @PathParam("achievementID") String achievementID, @FormParam("name") String name, @FormParam("reward") String reward, @FormParam("goal") String goal, @FormParam("type") String type, @FormParam("description") String description) {
 
-		AchievementManager am = AchievementManager.getInstance();		
-		am.changeAchievement(appID, achievementID, name, reward,goal, type, description);
+	public Response changeAchievement(@PathParam("appID") String appID,
+			@PathParam("achievementID") String achievementID, @FormParam("name") String name,
+			@FormParam("reward") String reward, @FormParam("goal") String goal, @FormParam("type") String type,
+			@FormParam("description") String description, @FormParam("token") String token) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
+
+		AchievementManager am = AchievementManager.getInstance();
+		am.changeAchievement(appID, achievementID, name, reward, goal, type, description, token);
 
 		return Response.ok().entity("").build(); // Send response * TO DO *
 	}
-	
-	//DELETE a specific achievement
-	@Path("/{achievementID}")
-	@DELETE	
-	public Response removeAchievement(@PathParam ("appID") String appID, @PathParam("achievementID") String achievementID) {
 
-		AchievementManager am = AchievementManager.getInstance();		
-		am.removeAchievement(appID, achievementID);
+	// DELETE a specific achievement
+	@Path("/{achievementID}")
+	@DELETE
+	public Response removeAchievement(@PathParam("appID") String appID,
+			@PathParam("achievementID") String achievementID, @FormParam("token") String token) {
+		
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody().get("user");
+
+		AchievementManager am = AchievementManager.getInstance();
+		am.removeAchievement(appID, achievementID, token);
 
 		return Response.ok().entity("").build(); // Send response * TO DO *
 	}
 
 }
-
-
-

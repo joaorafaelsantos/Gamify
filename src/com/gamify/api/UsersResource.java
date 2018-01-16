@@ -16,24 +16,24 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import com.gamify.impl.AuthManager;
 import com.gamify.impl.UserManager;
 import com.gamify.model.User;
+
+import io.jsonwebtoken.Jwts;
 
 @Path("/users")
 public class UsersResource {
 	// Create new user
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
-	public Response createUser(
-			@FormParam("userID") String userID,
-			@FormParam("password") String password,
-			@FormParam("email") String email,
-			@Context UriInfo uriInfo) {
+	public Response createUser(@FormParam("userID") String userID, @FormParam("password") String password,
+			@FormParam("email") String email, @Context UriInfo uriInfo) {
 
 		UserManager um = UserManager.getInstance();
 		um.createUser(userID, password, email);
 
-		UriBuilder builder = uriInfo.getAbsolutePathBuilder();	
+		UriBuilder builder = uriInfo.getAbsolutePathBuilder();
 		builder.path(userID);
 		return Response.created(builder.build()).build();
 	}
@@ -42,43 +42,54 @@ public class UsersResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 
-	public List<User> getUsers() {
+	public List<User> getUsers(@FormParam("token") String token) {
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody()
+				.get("user");
 
-		UserManager um = UserManager.getInstance();		
-		return um.getUsers();
+		UserManager um = UserManager.getInstance();
+		return um.getUsers(userAuth);
 	}
 
 	// GET a specific user
 	@Path("/{userID}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<User> getUser(@PathParam("userID") String userID) {
+	public List<User> getUser(@PathParam("userID") String userID, @FormParam("token") String token) {
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody()
+				.get("user");
 
-		UserManager um = UserManager.getInstance();		
-		return um.getUser(userID);
+		UserManager um = UserManager.getInstance();
+		return um.getUser(userID, userAuth);
 	}
 
 	// Change a specific user
 	@Path("/{userID}")
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
-	public Response changeUser(@PathParam("userID") String userID, @FormParam("password") String password, @FormParam("email") String email) {
+	public Response changeUser(@PathParam("userID") String userID, @FormParam("password") String password,
+			@FormParam("email") String email, @FormParam("token") String token) {
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody()
+				.get("user");
 
-		UserManager um = UserManager.getInstance();		
-		um.changeUser(userID, password, email);
+		UserManager um = UserManager.getInstance();
+		um.changeUser(userID, password, email, userAuth);
 
 		return Response.ok().entity("").build(); // Send response * TO DO *
 	}
 
 	// DELETE a specific user
 	@Path("/{userID}")
-	@DELETE	
-	public Object removeUser(@PathParam("userID") String userID) {
+	@DELETE
+	public Object removeUser(@PathParam("userID") String userID, @FormParam("token") String token) {
+		AuthManager authManager = AuthManager.getInstance();
+		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(token).getBody()
+				.get("user");
 
-		UserManager um = UserManager.getInstance();		
-		return um.removeUser(userID);
+		UserManager um = UserManager.getInstance();
+		return um.removeUser(userID, userAuth);
 	}
 
 }
-
-
