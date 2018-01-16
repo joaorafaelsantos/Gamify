@@ -39,8 +39,8 @@ public class AuthResource {
 			user.put("username", username);
 
 			// Create JWT token
-			String newToken = Jwts.builder().setClaims(user).setIssuer("Gamify")
-					.signWith(SignatureAlgorithm.HS512, am.getKey()).compact();
+			String newToken = Jwts.builder().setClaims(user).setSubject(username).setIssuer("Gamify")
+					.signWith(SignatureAlgorithm.HS256, am.getKey()).compact();
 
 			// Send token to the client
 			return Response.ok().entity(newToken).build();

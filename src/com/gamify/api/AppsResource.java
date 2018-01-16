@@ -23,6 +23,8 @@ import com.gamify.impl.UserManager;
 import com.gamify.model.App;
 import com.gamify.model.User;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 
 @Path("/users/{userID}/apps")
@@ -34,9 +36,10 @@ public class AppsResource {
 	public Response createApp(@FormParam("appID") String appID, @FormParam("appName") String appName,
 			@FormParam("type") String type, @FormParam("description") String description,
 			@FormParam("apiKey") String apiKey, @Context UriInfo uriInfo) {
-		
+
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
+		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+		String userAuth = claims.get("username").toString();
 
 		AppManager am = AppManager.getInstance();
 
@@ -51,9 +54,10 @@ public class AppsResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Object getApps(@PathParam("userID") String userID, @QueryParam("apiKey") String apiKey) {
-		
+
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
+		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+		String userAuth = claims.get("username").toString();
 
 		AppManager am = AppManager.getInstance();
 		return am.getApps(userID, userAuth);
@@ -65,9 +69,10 @@ public class AppsResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Object getApp(@PathParam("userID") String userID, @PathParam("appID") String appID,
 			@QueryParam("apiKey") String apiKey) {
-		
+
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
+		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+		String userAuth = claims.get("username").toString();
 
 		AppManager am = AppManager.getInstance();
 		return am.getApp(userID, appID, userAuth);
@@ -80,9 +85,10 @@ public class AppsResource {
 	public Response changeApp(@PathParam("appID") String appID, @FormParam("appName") String appName,
 			@FormParam("type") String type, @FormParam("description") String description,
 			@FormParam("apiKey") String apiKey) {
-		
+
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
+		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+		String userAuth = claims.get("username").toString();
 
 		AppManager am = AppManager.getInstance();
 		am.changeApp(appID, appName, type, description, userAuth);
@@ -94,9 +100,10 @@ public class AppsResource {
 	@Path("/{appID}")
 	@DELETE
 	public Response removeUser(@PathParam("appID") String appID, @QueryParam("apiKey") String apiKey) {
-		
+
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
+		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+		String userAuth = claims.get("username").toString();
 
 		AppManager am = AppManager.getInstance();
 		am.removeApp(appID, userAuth);

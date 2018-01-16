@@ -23,6 +23,7 @@ import com.gamify.impl.LeaderboardManager;
 
 import com.gamify.model.Leaderboard;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
 @Path("/apps/{appID}/leaderboards")
@@ -33,11 +34,13 @@ public class LeaderboardsResource {
 	@Consumes("application/x-www-form-urlencoded")
 	public Response createAchievement(@FormParam("leaderboardID") String leaderboardID,
 			@PathParam("appID") String appID, @FormParam("name") String name, @FormParam("type") String type,
-			@FormParam("description") String description, @FormParam("apiKey") String apiKey, @Context UriInfo uriInfo) {
-		
+			@FormParam("description") String description, @FormParam("apiKey") String apiKey,
+			@Context UriInfo uriInfo) {
+
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
-		
+		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+		String userAuth = claims.get("username").toString();
+
 		LeaderboardManager lm = LeaderboardManager.getInstance();
 
 		lm.createLeaderboard(leaderboardID, appID, name, type, description, userAuth);
@@ -51,9 +54,10 @@ public class LeaderboardsResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Leaderboard> getLeaderboards(@PathParam("appID") String appID, @QueryParam("apiKey") String apiKey) {
-		
+
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
+		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+		String userAuth = claims.get("username").toString();
 
 		LeaderboardManager lm = LeaderboardManager.getInstance();
 		return lm.getLeaderboards(appID, userAuth);
@@ -65,9 +69,10 @@ public class LeaderboardsResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Leaderboard getLeaderboard(@PathParam("appID") String appID,
 			@PathParam("leaderboardID") String leaderboardID, @QueryParam("apiKey") String apiKey) {
-		
+
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
+		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+		String userAuth = claims.get("username").toString();
 
 		LeaderboardManager lm = LeaderboardManager.getInstance();
 		return lm.getLeaderboard(appID, leaderboardID, userAuth);
@@ -79,10 +84,11 @@ public class LeaderboardsResource {
 	@Consumes("application/x-www-form-urlencoded")
 	public Response addInputs(@PathParam("appID") String appID, @PathParam("leaderboardID") String leaderboardID,
 			@FormParam("name") String name, @FormParam("score") String score, @FormParam("apiKey") String apiKey) {
-		
+
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
-		
+		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+		String userAuth = claims.get("username").toString();
+
 		LeaderboardManager lm = LeaderboardManager.getInstance();
 		lm.addInputs(appID, leaderboardID, name, score, userAuth);
 		return Response.ok().entity("").build();
@@ -96,10 +102,12 @@ public class LeaderboardsResource {
 
 	public Response changeLeaderboard(@PathParam("appID") String appID,
 			@PathParam("leaderboardID") String leaderboardID, @FormParam("name") String name,
-			@FormParam("type") String type, @FormParam("description") String description, @FormParam("apiKey") String apiKey) {
-		
+			@FormParam("type") String type, @FormParam("description") String description,
+			@FormParam("apiKey") String apiKey) {
+
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
+		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+		String userAuth = claims.get("username").toString();
 
 		LeaderboardManager lm = LeaderboardManager.getInstance();
 		lm.changeLeaderboard(appID, leaderboardID, name, type, description, userAuth);
@@ -112,9 +120,10 @@ public class LeaderboardsResource {
 	@DELETE
 	public Response removeLeaderboard(@PathParam("appID") String appID,
 			@PathParam("leaderboardID") String leaderboardID, @FormParam("apiKey") String apiKey) {
-		
+
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
+		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+		String userAuth = claims.get("username").toString();
 
 		LeaderboardManager lm = LeaderboardManager.getInstance();
 		lm.removeLeaderboard(appID, leaderboardID, userAuth);
@@ -129,9 +138,10 @@ public class LeaderboardsResource {
 	@Consumes("application/x-www-form-urlencoded")
 	public void resetLeaderBoardScore(@PathParam("appID") String appID,
 			@PathParam("leaderboardID") String leaderboardID, @FormParam("apiKey") String apiKey) {
-		
+
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
+		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+		String userAuth = claims.get("username").toString();
 
 		LeaderboardManager lm = LeaderboardManager.getInstance();
 		lm.resetLeaderboardScore(appID, leaderboardID, userAuth);
@@ -142,9 +152,10 @@ public class LeaderboardsResource {
 	@Consumes("application/x-www-form-urlencoded")
 	public Response resetLeaderBoardTotal(@PathParam("appID") String appID,
 			@PathParam("leaderboardID") String leaderboardID, @FormParam("apiKey") String apiKey) {
-		
+
 		AuthManager authManager = AuthManager.getInstance();
-		String userAuth = (String) Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody().get("user");
+		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+		String userAuth = claims.get("username").toString();
 
 		LeaderboardManager lm = LeaderboardManager.getInstance();
 		lm.resetLeaderboardTotal(appID, leaderboardID, userAuth);
