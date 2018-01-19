@@ -119,7 +119,7 @@ public class AchievementsResource {
 	@Path("/{achievementID}")
 	@DELETE
 	public Response removeAchievement(@PathParam("appID") String appID,
-			@PathParam("achievementID") String achievementID, @FormParam("apiKey") String apiKey) {
+			@PathParam("achievementID") String achievementID, @QueryParam("apiKey") String apiKey) {
 
 		AuthManager authManager = AuthManager.getInstance();
 		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();

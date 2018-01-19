@@ -1,7 +1,5 @@
 package com.gamify.api;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -19,12 +17,8 @@ import javax.ws.rs.core.UriInfo;
 
 import com.gamify.impl.AppManager;
 import com.gamify.impl.AuthManager;
-import com.gamify.impl.UserManager;
-import com.gamify.model.App;
-import com.gamify.model.User;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 
 @Path("/users/{userID}/apps")
@@ -99,6 +93,7 @@ public class AppsResource {
 	// DELETE a specific app
 	@Path("/{appID}")
 	@DELETE
+	
 	public Response removeUser(@PathParam("appID") String appID, @QueryParam("apiKey") String apiKey) {
 
 		AuthManager authManager = AuthManager.getInstance();

@@ -119,7 +119,7 @@ public class LeaderboardsResource {
 	@Path("/{leaderboardID}")
 	@DELETE
 	public Response removeLeaderboard(@PathParam("appID") String appID,
-			@PathParam("leaderboardID") String leaderboardID, @FormParam("apiKey") String apiKey) {
+			@PathParam("leaderboardID") String leaderboardID, @QueryParam("apiKey") String apiKey) {
 
 		AuthManager authManager = AuthManager.getInstance();
 		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();

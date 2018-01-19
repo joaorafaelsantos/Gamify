@@ -40,6 +40,7 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 				Leaderboard leaderboard = new Leaderboard(leaderboardID, appID, name, type, description, inputs);
 				LeaderboardData leaderboardData = LeaderboardData.getInstance();
 				leaderboardData.insertData(leaderboard);
+				break;
 			} else {
 				// The user is not authorized to create achievements from another user
 				ErrorData errorData = ErrorData.getInstance();

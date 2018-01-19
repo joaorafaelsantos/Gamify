@@ -1,13 +1,273 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Gamify UI</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <title>Gamify UI</title>
+
+
+
 </head>
+
 <body>
-    <h1>Gamify</h1>
-    <h5>Gamification Web Service</h5>
+
+  <h2>Login </h2>
+  <form id="formLog">
+    User:
+    <br>
+    <input id="txtUsername" type="text" name="username">
+    <br> Password:
+    <br>
+    <input id="txtPassword" type="text" name="password">
+    <br>
+    <br>
+  </form>
+
+  <button id="btnLogin">Login</button>
+  <br>
+  <br>
+  <button id="btnLogout">Logout</button>
+  <br>
+  <br>
+
+
+
+
+  <h2>Apps </h2>
+  <button id="btnGetApps">Get All Apps</button>
+  <br>
+  <button id="btnGetApp">Get An App</button>
+  <input id="txtAppIDSearch" type="text">
+  <br>
+  <br> appID:
+
+
+  <br>
+  <input id="txtAppID" type="text" name="appID">
+  <br> appName:
+  <br>
+  <input id="txtAppName" type="text" name="appName">
+  <br> type:
+  <br>
+  <input id="txtAppType" type="text" name="type">
+  <br> description:
+  <br>
+  <input id="txtAppDescription" type="text" name="description">
+  <br>
+  <button id="btnCreateApp">Create App</button>
+  <br>
+  <br>
+
+
+
+  <button id="btnDeleteApp">Delete An App</button>
+  <input id="txtAppIDDelete" type="text" name="txtAppIDDelete">
+  <br>
+  <br> appName:
+
+
+
+
+  <br>
+  <input id="txtAppNameChange" type="text" name="appName">
+  <br> type:
+  <br>
+  <input id="txtAppTypeChange" type="text" name="type">
+  <br> description:
+  <br>
+  <input id="txtAppDescriptionChange" type="text" name="description">
+  <br>
+  <input id="txtAppIDSearchChange" type="text">
+  <button id="btnChangeApp">Change An App</button>
+  <br>
+  <br>
+
+
+
+  <h2>Users </h2>
+  <button id="btnGetUsers">Get All Users</button>
+  <br>
+
+  <button id="btnGetUser">Get An User</button>
+  <input id="txtUserIDSearch" type="text">
+  <br>
+  <br> userID:
+
+
+
+  <br>
+  <input id="txtUserID" type="text" name="userID">
+  <br> userPassword:
+  <br>
+  <input id="txtUserPassword" type="text" name="password">
+  <br> Email:
+  <br>
+  <input id="txtEmail" type="text" name="email">
+  <br>
+
+  <button id="btnCreateUser">Create User</button>
+  <br>
+  <br> userPassword:
+
+
+  <br>
+  <input id="txtUserPasswordChange" type="text" name="password">
+  <br> email:
+  <br>
+  <input id="txtUserEmailChange" type="text" name="email">
+  <br>
+  <input id="txtUserIDSearchChange" type="text">
+  <button id="btnChangeUser">Change An User</button>
+  <br>
+  <br>
+
+  <button id="btnDeleteUser">Delete this User </button>
+  <br>
+
+
+
+  <h2>Achievements </h2>
+  App:
+  <input id="txtAppforAchievement" type="text">
+  <br>
+
+  <button id="btnGetAchievements">Get All Achievements</button>
+  <br>
+  <button id="btnGetAchievement">Get An Achievement</button>
+  <input id="txtAchievementIDSearch" type="text">
+  <br>
+  <br> achievementID:
+  <br>
+  <input id="txtAchievementIDCreate" type="text" name="achievementID">
+  <br> achievementName:
+  <br>
+  <input id="txtAchievementName" type="text" name="name">
+  <br> reward:
+  <br>
+  <input id="txtAchievementReward" type="text" name="reward">
+  <br> goal:
+  <br>
+  <input id="txtAchievementGoal" type="text" name="goal">
+  <br> structure:
+  <br>
+  <input id="txtAchievementStructure" type="text" name="structure">
+  <br> type:
+  <br>
+  <input id="txtAchievementType" type="text" name="type">
+  <br> description:
+  <br>
+  <input id="txtAchievementDescription" type="text" name="description">
+  <br>
+  <button id="btnCreateAchievement">Create Achievement</button>
+  <br>
+  <br> id input:
+  <input id="txtAchievementIDSearchInput" type="text">
+  <br>name
+  <input id="txtAchievementNameInput" type="text">
+  <br>score
+  <input id="txtAchievementScore" type="text">
+  <br>
+  <button id="btnInputAchievement">Input</button>
+  <br>
+  <br> To Change :
+  <br>id
+  <input id="txtAchievementIDSearchChange" type="text">
+  <br>name
+  <input id="txtAchievementNameChange" type="text">
+  <br>reward
+  <input id="txtAchievementRewardChange" type="text">
+  <br>goal
+  <input id="txtAchievementGoalChange" type="text">
+  <br>type
+  <input id="txtAchievementTypeChange" type="text">
+  <br>description
+  <input id="txtAchievementDescriptionChange" type="text">
+  <br>
+  <button id="btnChangeAchievement">change</button>
+  <br>
+  <br> ID to delete
+  <input id="txtAchievementIDDelete" type="text">
+  <br>
+  <button id="btnDeleteAchievement">delete</button>
+  <br>
+  <br>
+
+
+  <h2>Leaderboards </h2>
+  App:
+  <input id="txtAppforLeaderboard" type="text">
+  <br>
+  <button id="btnGetLeaderboards">Get All Leaderboards</button>
+  <br>
+  <button id="btnGetLeaderboard">Get An Leaderboard</button>
+  <input id="txtLeaderboardIDSearch" type="text">
+  <br>
+  <br> LeaderboardID:
+  <br>
+  <input id="txtLeaderboardIDCreate" type="text" name="leaderboardID">
+  <br> LeaderboardName:
+  <br>
+  <input id="txtLeaderboardName" type="text" name="name">
+  <br> type:
+  <br>
+  <input id="txtLeaderboardType" type="text" name="type">
+  <br> description:
+  <br>
+  <input id="txtLeaderboardDescription" type="text" name="description">
+  <br>
+  <button id="btnCreateLeaderboard">Create Leaderboard</button>
+  <br>
+  <br> id input:
+  <input id="txtLeaderboardIDSearchInput" type="text">
+  <br>name
+  <input id="txtLeaderboardNameInput" type="text">
+  <br>score
+  <input id="txtLeaderboardScore" type="text">
+  <br>
+  <button id="btnInputLeaderboard">Input</button>
+
+  <br> To Change :
+  <br>id
+  <input id="txtLeaderboardIDSearchChange" type="text">
+  <br>name
+  <input id="txtLeaderboardNameChange" type="text">
+  <br>type
+  <input id="txtLeaderboardTypeChange" type="text">
+  <br>description
+  <input id="txtLeaderboardDescriptionChange" type="text">
+  <br>
+  <button id="btnChangeLeaderboard">change</button>
+  <br>
+  <br> ID to delete
+  <input id="txtLeaderboardIDDelete" type="text">
+  <br>
+  <button id="btnDeleteLeaderboard">delete</button>
+  <br>
+  <br> ID Reset Score
+  <input id="txtLeaderboardIDResetScore" type="text">
+  <br>
+  <button id="btnResetScoreLeaderboard">Reset Score</button>
+  <br> ID Reset Total
+  <input id="txtLeaderboardIDResetTotal" type="text">
+  <br>
+  <button id="btnResetTotalLeaderboard">Reset Total</button>
+
+
+
+
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+
+  <script src="authRoutes.js"></script>
+  <script src="userRoutes.js"></script>
+  <script src="appRoutes.js"></script>
+  <script src="achievementRoutes.js"></script>
+  <script src="leaderboardRoutes.js"></script>
+
 </body>
+
 </html>

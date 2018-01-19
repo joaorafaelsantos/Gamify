@@ -1,20 +1,15 @@
 package com.gamify.impl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import javax.ws.rs.core.Response;
 
 import com.gamify.data.AchievementData;
 import com.gamify.data.AppData;
 import com.gamify.data.ErrorData;
-import com.gamify.data.UserData;
 import com.gamify.interf.InterfaceAchievement;
 import com.gamify.model.Achievement;
 import com.gamify.model.App;
 import com.gamify.model.Input;
-import com.gamify.model.User;
 
 public class AchievementManager implements InterfaceAchievement {
 
@@ -44,6 +39,7 @@ public class AchievementManager implements InterfaceAchievement {
 						description, inputs);
 				AchievementData achievementData = AchievementData.getInstance();
 				achievementData.insertData(achievement);
+				break;
 			} else {
 				// The user is not authorized to create achievements from another user
 				ErrorData errorData = ErrorData.getInstance();
