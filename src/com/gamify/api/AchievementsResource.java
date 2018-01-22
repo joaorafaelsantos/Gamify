@@ -152,7 +152,7 @@ public class AchievementsResource {
 	@Path("/{achievementID}")
 	@DELETE
 	public Object removeAchievement(@PathParam("appID") String appID, @PathParam("achievementID") String achievementID,
-			@FormParam("apiKey") String apiKey) {
+			@QueryParam("apiKey") String apiKey) {
 
 		if (appID != null && achievementID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();

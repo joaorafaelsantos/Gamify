@@ -143,7 +143,7 @@ public class LeaderboardsResource {
 	@Path("/{leaderboardID}")
 	@DELETE
 	public Object removeLeaderboard(@PathParam("appID") String appID, @PathParam("leaderboardID") String leaderboardID,
-			@FormParam("apiKey") String apiKey) {
+			@QueryParam("apiKey") String apiKey) {
 
 		if (appID != null && leaderboardID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();

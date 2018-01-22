@@ -8,8 +8,10 @@ $(document).ready(function () {
     var url = apiPath + "/errors?apiKey=" + apiKey;
     $.ajax({
         url: url,
+        contenType:application/json,
         type: "GET",
         success: function (data) {
+            console.log(data)
             errors = data;
 
             if ($("#errorsNumber") != undefined) {
