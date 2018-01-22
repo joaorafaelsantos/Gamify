@@ -229,7 +229,7 @@ $(document).ready(function () {
             apiKey: apiKey
         }
 
-        console.log(selectedApp, form_data)
+        console.log(selectedApp,leaderboardResetScore, form_data)
         var url = apiPath + "/apps/" + selectedApp + "/leaderboards/" + leaderboardResetScore + "/reset/score?apiKey=" + apiKey;
         $.ajax({
             url: url,
@@ -245,11 +245,11 @@ $(document).ready(function () {
 
     // Reset Total
     $("#btnResetTotalLeaderboard").click(function () {
-        selectedApp = $("#txtAppforLeaderboard").val()
+        selectedApp = $("#selectApp").val()
         username = sessionStorage.getItem("username");
         apiKey = sessionStorage.getItem("apiKey");
         //Get leaderboardID to reset
-        leaderboardResetTotal = $("#txtLeaderboardIDResetTotal").val();
+        leaderboardResetTotal = $("#selectLb").val();
 
         var form_data = {
             apiKey: apiKey
