@@ -1,7 +1,5 @@
 package com.gamify.api;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -11,18 +9,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
-
 import com.gamify.data.ErrorData;
 import com.gamify.impl.AuthManager;
 import com.gamify.impl.UserManager;
 import com.gamify.model.Error;
-import com.gamify.model.User;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
@@ -49,7 +41,7 @@ public class UsersResource {
 
 	// Get all users
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 
 	public Object getUsers(@QueryParam("apiKey") String apiKey) {
 		if (apiKey != null) {
@@ -69,7 +61,7 @@ public class UsersResource {
 	// GET a specific user
 	@Path("/{userID}")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Object getUser(@PathParam("userID") String userID, @QueryParam("apiKey") String apiKey) {
 		if (userID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();

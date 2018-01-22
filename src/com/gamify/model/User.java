@@ -1,13 +1,17 @@
 package com.gamify.model;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement(name = "user")
 public class User {
+	
 	private String userID;
 	private String password;
 	private String email;
+	
+	public User() {
+	}
 		 
 	public User(String userID, String password, String email) {
 		super();
@@ -21,10 +25,8 @@ public class User {
 		this.userID = userID;
 		this.email = email;
 	}
-	
-	public User() {
-	}
 
+	@XmlElement(name = "userID")
 	public String getUserID() {
 		return userID;
 	}
@@ -41,6 +43,7 @@ public class User {
 		this.password = password;
 	}
 
+	@XmlElement(name = "email")
 	public String getEmail() {
 		return email;
 	}

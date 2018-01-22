@@ -1,5 +1,9 @@
 package com.gamify.model;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "app")
 public class App {
 
 	private String appID;
@@ -8,8 +12,9 @@ public class App {
 	private String type;
 	private String description;
 
-	public App() {}
-	
+	public App() {
+	}
+
 	public App(String appID, String userID, String appName, String type, String description) {
 		super();
 		this.appID = appID;
@@ -19,6 +24,7 @@ public class App {
 		this.description = description;
 	}
 
+	@XmlElement(name = "appID")
 	public String getAppID() {
 		return appID;
 	}
@@ -27,6 +33,7 @@ public class App {
 		this.appID = appID;
 	}
 
+	@XmlElement(name = "userID")
 	public String getUserID() {
 		return userID;
 	}
@@ -35,6 +42,7 @@ public class App {
 		this.userID = userID;
 	}
 
+	@XmlElement(name = "appName")
 	public String getAppName() {
 		return appName;
 	}
@@ -43,6 +51,7 @@ public class App {
 		this.appName = appName;
 	}
 
+	@XmlElement(name = "type")
 	public String getType() {
 		return type;
 	}
@@ -51,6 +60,7 @@ public class App {
 		this.type = type;
 	}
 
+	@XmlElement(name = "description")
 	public String getDescription() {
 		return description;
 	}
@@ -58,11 +68,5 @@ public class App {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-
-
-
-
-
 
 }

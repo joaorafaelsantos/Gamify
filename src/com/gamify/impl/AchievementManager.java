@@ -66,7 +66,7 @@ public class AchievementManager implements InterfaceAchievement {
 				}
 
 			} else {
-				// The user is not authorized to create achievements from another user
+				// The user is not authorised to create achievements from another user
 				ErrorData errorData = ErrorData.getInstance();
 				errorData.getData("3");
 			}
@@ -94,7 +94,7 @@ public class AchievementManager implements InterfaceAchievement {
 				if (app.getUserID().equals(userAuth)) {
 					return achievementData.getData(appID);
 				} else {
-					// The user is not authorized to see achievements from another user
+					// The user is not authorised to see achievements from another user
 					ErrorData errorData = ErrorData.getInstance();
 					return errorData.getData("3");
 				}
@@ -124,7 +124,7 @@ public class AchievementManager implements InterfaceAchievement {
 
 					return achievementData.getSpecificData(appID, achievementID);
 				} else {
-					// The user is not authorized to see achievements from another user
+					// The user is not authorised to see achievements from another user
 					ErrorData errorData = ErrorData.getInstance();
 					errorData.getData("3");
 				}
@@ -171,7 +171,7 @@ public class AchievementManager implements InterfaceAchievement {
 				achievementData.changeData(appID, achievementID, name, reward, goal, type, description);
 			}
 		} else if (!permissions) {
-			// The user is not authorized to change achievements from another user
+			// The user is not authorised to change achievements from another user
 			ErrorData errorData = ErrorData.getInstance();
 			errorData.getData("3");
 		}
@@ -212,7 +212,7 @@ public class AchievementManager implements InterfaceAchievement {
 				achievementData.removeData(appID, achievementID);
 			}
 		} else if (!permissions) {
-			// The user is not authorized to change achievements from another user
+			// The user is not authorised to change achievements from another user
 			ErrorData errorData = ErrorData.getInstance();
 			errorData.getData("3");
 		}
@@ -276,7 +276,7 @@ public class AchievementManager implements InterfaceAchievement {
 				ErrorData errorData = ErrorData.getInstance();
 				errorData.getData("11");
 			} else if (permission == false) {
-				// The user is not authorized to add inputs to achievements from another user
+				// The user is not authorised to add inputs to achievements from another user
 				ErrorData errorData = ErrorData.getInstance();
 				errorData.getData("3");
 			}

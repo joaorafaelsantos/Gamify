@@ -1,7 +1,5 @@
 package com.gamify.api;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -15,15 +13,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import com.gamify.data.ErrorData;
 import com.gamify.impl.AuthManager;
 import com.gamify.impl.LeaderboardManager;
 import com.gamify.model.Error;
-import com.gamify.model.Leaderboard;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
@@ -55,7 +50,7 @@ public class LeaderboardsResource {
 
 	// Get all leaderboards
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Object getLeaderboards(@PathParam("appID") String appID, @QueryParam("apiKey") String apiKey) {
 
 		if (appID != null && appID != null && apiKey != null) {
@@ -76,7 +71,7 @@ public class LeaderboardsResource {
 	// GET a specific leaderboard
 	@Path("/{leaderboardID}")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Object getLeaderboard(@PathParam("appID") String appID, @PathParam("leaderboardID") String leaderboardID,
 			@QueryParam("apiKey") String apiKey) {
 

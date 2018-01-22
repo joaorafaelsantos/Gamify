@@ -9,17 +9,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
 
 import com.gamify.data.ErrorData;
 import com.gamify.impl.AppManager;
 import com.gamify.impl.AuthManager;
 import com.gamify.model.Error;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
@@ -52,7 +48,7 @@ public class AppsResource {
 
 	// Get all apps
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Object getApps(@PathParam("userID") String userID, @QueryParam("apiKey") String apiKey) {
 
 		if (userID != null && apiKey != null) {
@@ -73,7 +69,7 @@ public class AppsResource {
 	// GET a specific app
 	@Path("/{appID}")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Object getApp(@PathParam("userID") String userID, @PathParam("appID") String appID,
 			@QueryParam("apiKey") String apiKey) {
 

@@ -1,7 +1,5 @@
 package com.gamify.api;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -15,14 +13,11 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import com.gamify.data.ErrorData;
 import com.gamify.impl.AchievementManager;
 import com.gamify.impl.AuthManager;
-import com.gamify.model.Achievement;
-import com.gamify.model.App;
 import com.gamify.model.Error;
 
 import io.jsonwebtoken.Claims;
@@ -62,7 +57,7 @@ public class AchievementsResource {
 
 	// Get all achievements
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Object getAchievements(@PathParam("appID") String appID, @QueryParam("apiKey") String apiKey) {
 
 		if (appID != null && apiKey != null) {
@@ -83,7 +78,7 @@ public class AchievementsResource {
 	// GET a specific achievement
 	@Path("/{achievementID}")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Object getAchievement(@PathParam("appID") String appID, @PathParam("achievementID") String achievementID,
 			@QueryParam("apiKey") String apiKey) {
 

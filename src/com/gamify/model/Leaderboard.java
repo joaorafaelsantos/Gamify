@@ -3,6 +3,10 @@ package com.gamify.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "leaderboard")
 public class Leaderboard {
 
 	private String leaderboardID;
@@ -11,10 +15,12 @@ public class Leaderboard {
 	private String type;
 	private String description;
 	private List<Input> inputs = new ArrayList<Input>();
-	
-	public Leaderboard() {}
 
-	public Leaderboard(String leaderboardID, String appID, String name, String type, String description, List<Input> inputs) {
+	public Leaderboard() {
+	}
+
+	public Leaderboard(String leaderboardID, String appID, String name, String type, String description,
+			List<Input> inputs) {
 		super();
 		this.leaderboardID = leaderboardID;
 		this.appID = appID;
@@ -24,7 +30,7 @@ public class Leaderboard {
 		this.inputs = inputs;
 	}
 
-
+	@XmlElement(name = "leaderboardID")
 	public String getLeaderboardID() {
 		return leaderboardID;
 	}
@@ -33,6 +39,7 @@ public class Leaderboard {
 		this.leaderboardID = leaderboardID;
 	}
 
+	@XmlElement(name = "appID")
 	public String getAppID() {
 		return appID;
 	}
@@ -41,6 +48,7 @@ public class Leaderboard {
 		this.appID = appID;
 	}
 
+	@XmlElement(name = "name")
 	public String getName() {
 		return name;
 	}
@@ -49,6 +57,7 @@ public class Leaderboard {
 		this.name = name;
 	}
 
+	@XmlElement(name = "type")
 	public String getType() {
 		return type;
 	}
@@ -57,6 +66,7 @@ public class Leaderboard {
 		this.type = type;
 	}
 
+	@XmlElement(name = "description")
 	public String getDescription() {
 		return description;
 	}
@@ -65,16 +75,13 @@ public class Leaderboard {
 		this.description = description;
 	}
 
-
+	@XmlElement(name = "inputs")
 	public List<Input> getInputs() {
 		return inputs;
 	}
 
-
-	public void setInputs(List<Input>inputs) {
+	public void setInputs(List<Input> inputs) {
 		this.inputs = inputs;
 	}
 
-	
-	
 }
