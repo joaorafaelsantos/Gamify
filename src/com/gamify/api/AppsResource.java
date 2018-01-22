@@ -117,7 +117,7 @@ public class AppsResource {
 	@Path("/{appID}")
 	@DELETE
 
-	public Object removeApp(@PathParam("appID") String appID, @FormParam("apiKey") String apiKey) {
+	public Object removeApp(@PathParam("appID") String appID, @QueryParam("apiKey") String apiKey) {
 
 		if (appID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();

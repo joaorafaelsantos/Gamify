@@ -33,7 +33,7 @@ $(document).ready(function () {
 
     // Get all leaderboards
     $("#btnGetLeaderboards").click(function () {
-        selectedApp = $("#txtAppforLeaderboard").val();
+        selectedApp = $("#selectApp").val();
         username = sessionStorage.getItem("username");
         apiKey = sessionStorage.getItem("apiKey");
         console.log(selectedApp);
@@ -45,16 +45,41 @@ $(document).ready(function () {
                 console.log(data);
                 //return an array of objects type leaderboard
                 leaderboards = data;
+
+                if ($("#leaderboardsNumber") != undefined) {
+                    $("#leaderboardsNumber").text(leaderboards.length);
+                }
+    
+                if ($("#tbodyLeaderboards") != undefined) {
+                    $("#tbodyLeaderboards").empty();
+                    let content;
+                    let contentLb;
+                    
+                    for (let i = 0; i < leaderboards.length; i++) {
+                        const element = leaderboards[i];
+                        content += "<tr><td>" + element.leaderboardID + "</td>" + "<td>" + element.appID + "</td>" + "<td>" + element.name + "</td>"  + "<td>" + element.type + "</td>" + "<td>" + element.description + "</td>" + "<td>" + element.inputs.length + "</td>" + "</tr>"
+                        contentLb+='<option value=' + element.leaderboardID + '>' + element.leaderboardID + '</option>';
+                    }
+                    $("#tbodyLeaderboards").append(content);
+                    if(contentLb==null ){
+                        contentLb="";
+                    }
+                    $("#selectLb").html(contentLb)
+                    $("#selectLbInput").html(contentLb)
+                   
+                    
+                }
             }
         })
     });
 
     //Get leaderboard
     $("#btnGetLeaderboard").click(function () {
-        selectedApp = $("#txtAppforLeaderboard").val();
+        selectedApp = $("#selectApp").val();
         username = sessionStorage.getItem("username");
         apiKey = sessionStorage.getItem("apiKey");
-        //Get leaderboardID from input
+        var content;
+        var contentInput;
         leaderboardSearch = $("#txtLeaderboardIDSearch").val();
         var url = apiPath + "/apps/" + selectedApp + "/leaderboards/" + leaderboardSearch + "?apiKey=" + apiKey
         $.ajax({
@@ -64,6 +89,15 @@ $(document).ready(function () {
                 console.log(data);
                 //return object type leaderboard
                 leaderboardData = data;
+
+                content += "<tr><td>" + leaderboardData.leaderboardID + "</td>" + "<td>" + leaderboardData.appID + "</td>" + "<td>" + leaderboardData.name + "</td>"  + "<td>" + leaderboardData.type + "</td>" + "<td>" + leaderboardData.description + "</td>" + "<td>" + leaderboardData.inputs.length + "</td>" + "</tr>"
+                $("#tbodyLeaderboard").html(content);
+                console.log(leaderboardData.inputs.length);
+                for (let i = 0; i < leaderboardData.inputs.length; i++) {
+                    contentInput += "<tr><td>" + leaderboardData.inputs[i].name + "</td>" + "<td>" + leaderboardData.inputs[i].score  + "</td>"  + "</tr>";
+                }
+                
+                $("#tinputLeaderboard").html(contentInput);
             }
         })
     });
@@ -71,18 +105,18 @@ $(document).ready(function () {
 
     //Create leaderboard
     $("#btnCreateLeaderboard").click(function () {
-        selectedApp = $("#txtAppforLeaderboard").val();
+        selectedApp = $("#selectApplb").val();
         username = sessionStorage.getItem("username");
         apiKey = sessionStorage.getItem("apiKey");
 
 
-        leaderboardID = $("#txtLeaderboardIDCreate").val();
+        //leaderboardID = $("#txtLeaderboardIDCreate").val();
         leaderboardName = $("#txtLeaderboardName").val();
         type = $("#txtLeaderboardType").val();
         description = $("#txtLeaderboardDescription").val();
 
         var form_data = {
-            leaderboardID: leaderboardID,
+           
             name: leaderboardName,
             type: type,
             description: description,
@@ -104,11 +138,11 @@ $(document).ready(function () {
 
     //Input leaderboard
     $("#btnInputLeaderboard").click(function () {
-        selectedApp = $("#txtAppforLeaderboard").val()
+        selectedApp = $("#selectApp").val()
         username = sessionStorage.getItem("username");
         apiKey = sessionStorage.getItem("apiKey");
         //Get leaderboardID from input
-        leaderboardInput = $("#txtLeaderboardIDSearchInput").val();
+        leaderboardInput = $("#selectLbInput").val();
 
         name = $("#txtLeaderboardNameInput").val();
         score = $("#txtLeaderboardScore").val();
@@ -118,7 +152,7 @@ $(document).ready(function () {
             score: score,
             apiKey: apiKey
         }
-
+        console.log(name);
         console.log(selectedApp, form_data)
         var url = apiPath + "/apps/" + selectedApp + "/leaderboards/" + leaderboardInput + "?apiKey=" + apiKey;
         $.ajax({
@@ -135,11 +169,11 @@ $(document).ready(function () {
 
     // Change leaderboard
     $("#btnChangeLeaderboard").click(function () {
-        selectedApp = $("#txtAppforLeaderboard").val()
+        selectedApp = $("#selectApp").val()
         username = sessionStorage.getItem("username");
         apiKey = sessionStorage.getItem("apiKey");
 
-        leaderboardSearchChange = $("#txtLeaderboardIDSearchChange").val();
+        leaderboardSearchChange = $("#selectLb").val();
         console.log(leaderboardSearchChange)
 
         leaderboardName = $("#txtLeaderboardNameChange").val();
@@ -165,11 +199,11 @@ $(document).ready(function () {
 
     //Delete  
     $("#btnDeleteLeaderboard").click(function () {
-        selectedApp = $("#txtAppforLeaderboard").val()
+        selectedApp = $("#selectApp").val()
         username = sessionStorage.getItem("username");
         apiKey = sessionStorage.getItem("apiKey");
 
-        leaderboardDelete = $("#txtLeaderboardIDDelete").val();
+        leaderboardDelete = $("#selectLb").val();
 
         var url = apiPath + "/apps/" + selectedApp + "/leaderboards/" + leaderboardDelete + "?apiKey=" + apiKey;
         $.ajax({
@@ -185,11 +219,11 @@ $(document).ready(function () {
 
     // Reset Score
     $("#btnResetScoreLeaderboard").click(function () {
-        selectedApp = $("#txtAppforLeaderboard").val()
+        selectedApp = $("#selectApp").val()
         username = sessionStorage.getItem("username");
         apiKey = sessionStorage.getItem("apiKey");
         //Get leaderboardID to reset
-        leaderboardResetScore = $("#txtLeaderboardIDResetScore").val();
+        leaderboardResetScore = $("#selectLb").val();
 
         var form_data = {
             apiKey: apiKey

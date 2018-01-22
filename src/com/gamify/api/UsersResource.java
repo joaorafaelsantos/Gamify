@@ -103,7 +103,7 @@ public class UsersResource {
 	// DELETE a specific user
 	@Path("/{userID}")
 	@DELETE
-	public Object removeUser(@PathParam("userID") String userID, @FormParam("apiKey") String apiKey) {
+	public Object removeUser(@PathParam("userID") String userID, @QueryParam("apiKey") String apiKey) {
 		if (userID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();

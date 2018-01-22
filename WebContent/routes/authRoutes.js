@@ -13,12 +13,12 @@ $(document).ready(function () {
     $("#btnLogin").click(function () {
         username = $("#txtUsername").val();
         password = $("#txtPassword").val();
-
+        sessionStorage.setItem("apiKey", "default");
         sessionStorage.setItem("username", username);
 
 
         var form_data = {
-            username: username,
+            userID: username,
             password: password
         }
         var url = apiPath + "/auth"
@@ -27,12 +27,14 @@ $(document).ready(function () {
             type: "POST",
             data: form_data,
             success: function (data) {
-                sessionStorage.setItem("apiKey", data);
+                var token = data
+               // var token = data.code
+                sessionStorage.setItem("apiKey", token);
                 apiKey = sessionStorage.getItem("apiKey");
                 //console.log(data); 
                 // return an apiKey
                 console.log("Logged")
-
+                window.open("./home.html","_self");
             }
         })
     });
@@ -45,6 +47,7 @@ $(document).ready(function () {
         sessionStorage.removeItem("username");
         console.log(sessionStorage.getItem("apiKey"));
         console.log(sessionStorage.getItem("username"));
+        window.open("./login.html","_self");
     });
 
 

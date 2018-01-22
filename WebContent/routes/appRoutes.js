@@ -28,25 +28,50 @@ $(document).ready(function () {
 
 
             // Get all Apps
-            $("#btnGetApps").click(function () {
+        //    $("#btnGetApps").click(function () {
                 username = sessionStorage.getItem("username");
                 apiKey = sessionStorage.getItem("apiKey");
                 var url = apiPath + "/users/" + username + "/apps?apiKey=" + apiKey;
+                
                 $.ajax({
                     url: url,
                     type: "GET",
+                    
                     success: function (data) {
-                        console.log(data);
+                        //console.log(data);
                         //return an array of objects type App
                         apps = data;
+                        
+                        if ($("#appsNumber") != undefined) {
+                            $("#appsNumber").text(apps.length);
+                        }
+            
+                        if ($("#tbodyApps") != undefined) {
+                            $("#tbodyApps").empty();
+                            let content;
+                            let contentApps;
+                            for (let i = 0; i < apps.length; i++) {
+                                const element = apps[i];
+                                content += "<tr><td>" + element.appID + "</td>" + "<td>" + element.userID + "</td>" + "<td>" + element.appName + "</td>" + "<td>" + element.type + "</td>" + "<td>" + element.description + "</td>" + "</tr>"
+                                contentApps+='<option value=' + element.appID + '>' + element.appID + '</option>';
+                                //console.log(contentApps , element.appID);
+                            }
+                            $("#tbodyApps").append(content);
+                            $("#selectApp").append(contentApps);
+                            $("#selectApplb").append(contentApps);
+                           
+                            $("#selectAppach").append(contentApps);
+                            
+                        }
                     }
                 })
-            });
+           // });
 
             //Get App
             $("#btnGetApp").click(function () {
                 username = sessionStorage.getItem("username");
                 apiKey = sessionStorage.getItem("apiKey");
+                var content;
                 //Get appID from input
                 appSearch = $("#txtAppIDSearch").val();
                 var url = apiPath + "/users/" + username + "/apps/" + appSearch + "/?apiKey=" + apiKey
@@ -57,6 +82,10 @@ $(document).ready(function () {
                         console.log(data);
                         //return object type App
                         appData = data;
+                       
+                        content += "<tr><td>" + appData.appID + "</td>" + "<td>" + appData.userID + "</td>" + "<td>" + appData.appName + "</td>" + "<td>" + appData.type + "</td>" + "<td>" + appData.description + "</td>" + "</tr>"
+                    
+                    $("#tbodyApp").html(content);
                     }
                 })
             });
@@ -71,7 +100,7 @@ $(document).ready(function () {
                 description = $("#txtAppDescription").val();
 
                 var form_data = {
-                    appID: appID,
+                   
                     appName: appName,
                     type: type,
                     description: description,
@@ -97,12 +126,13 @@ $(document).ready(function () {
                 username = sessionStorage.getItem("username");
                 apiKey = sessionStorage.getItem("apiKey");
 
-                appSearchChange = $("#txtAppIDSearchChange").val();
-                console.log(appSearchChange)
-
+                appSearchChange = $("#selectApp").val();
+                
                 appName = $("#txtAppNameChange").val();
                 type = $("#txtAppTypeChange").val();
                 description = $("#txtAppDescriptionChange").val();
+
+                console.log(appSearchChange,appName,type,description)
 
                 var form_data = {
                     appName: appName,
@@ -125,7 +155,7 @@ $(document).ready(function () {
             $("#btnDeleteApp").click(function () {
                     username = sessionStorage.getItem("username");
                     apiKey = sessionStorage.getItem("apiKey");
-                    appDelete = $("#txtAppIDDelete").val();
+                    appDelete = $("#selectApp").val()
                     var url = apiPath + "/users/" + username + "/apps/" + appDelete + "?apiKey=" + apiKey;
                     $.ajax({
                             url: url,

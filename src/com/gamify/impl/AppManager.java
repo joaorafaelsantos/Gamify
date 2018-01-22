@@ -49,7 +49,7 @@ public class AppManager implements InterfaceApp {
 			int newID = Integer.parseInt(apps.get(apps.size() - 1).getAppID().replace("app", "")) + 1;
 			String appID = "app" + Integer.toString(newID);
 			App app = new App(appID, userID, appName, type, description);
-			appData.insertData(app);
+			appData.insertData(app);		
 			// The user is created with success
 			return Response.ok().entity(appName + " created!").build();
 		}
