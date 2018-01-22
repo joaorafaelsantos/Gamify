@@ -24,24 +24,24 @@ public class AuthResource {
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
 
-	public Response auth(@FormParam("username") String username, @FormParam("password") String password) {
+	public Response auth(@FormParam("userID") String userID, @FormParam("password") String password) {
 
-		if (username != null && password != null) {
+		if (userID != null && password != null) {
 			AuthManager am = AuthManager.getInstance();
 			boolean validate;
 
 			// Validate user data in db store
 
-			validate = am.getAuth(username, password);
+			validate = am.getAuth(userID, password);
 
 			if (validate) {
 
 				// Create user data
 				Map<String, Object> user = new HashMap<String, Object>();
-				user.put("username", username);
+				user.put("userID", userID);
 
 				// Create JWT token
-				String newToken = Jwts.builder().setClaims(user).setSubject(username).setIssuer("Gamify")
+				String newToken = Jwts.builder().setClaims(user).setSubject(userID).setIssuer("Gamify")
 						.signWith(SignatureAlgorithm.HS256, am.getKey()).compact();
 
 				// Send token to the client

@@ -34,25 +34,22 @@ public class AchievementsResource {
 	// Create new achievement
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
-	public Response createAchievement(@FormParam("achievementID") String achievementID,
-			@PathParam("appID") String appID, @FormParam("name") String name, @FormParam("structure") String structure,
-			@FormParam("reward") String reward, @FormParam("goal") String goal, @FormParam("type") String type,
+	public Response createAchievement(@PathParam("appID") String appID, @FormParam("name") String name,
+			@FormParam("structure") String structure, @FormParam("reward") String reward,
+			@FormParam("goal") String goal, @FormParam("type") String type,
 			@FormParam("description") String description, @FormParam("apiKey") String apiKey,
 			@Context UriInfo uriInfo) {
 
-		if (achievementID != null && appID != null && name != null && structure != null && reward != null
+		if (appID != null && name != null && structure != null && reward != null
 				&& goal != null && type != null && description != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			AchievementManager am = AchievementManager.getInstance();
 
-			am.createAchievement(achievementID, appID, name, structure, reward, goal, type, description, userAuth);
+			return am.createAchievement(appID, name, structure, reward, goal, type, description, userAuth);
 
-			UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-			builder.path(achievementID);
-			return Response.created(builder.build()).build();
 		} else {
 			// Invalid data
 			ErrorData errorData = ErrorData.getInstance();
@@ -71,7 +68,7 @@ public class AchievementsResource {
 		if (appID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			AchievementManager am = AchievementManager.getInstance();
 			return am.getAchievements(appID, userAuth);
@@ -93,7 +90,7 @@ public class AchievementsResource {
 		if (appID != null && achievementID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			AchievementManager am = AchievementManager.getInstance();
 			return am.getAchievement(appID, achievementID, userAuth);
@@ -115,7 +112,7 @@ public class AchievementsResource {
 		if (appID != null && achievementID != null && name != null && score != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			AchievementManager am = AchievementManager.getInstance();
 			am.addInputs(appID, achievementID, name, score, userAuth);
@@ -142,7 +139,7 @@ public class AchievementsResource {
 				&& description != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			AchievementManager am = AchievementManager.getInstance();
 			am.changeAchievement(appID, achievementID, name, reward, goal, type, description, userAuth);
@@ -165,7 +162,7 @@ public class AchievementsResource {
 		if (appID != null && achievementID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			AchievementManager am = AchievementManager.getInstance();
 			am.removeAchievement(appID, achievementID, userAuth);

@@ -3,12 +3,15 @@ package com.gamify.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.core.Response;
+
 import com.gamify.data.AchievementData;
 import com.gamify.data.AppData;
 import com.gamify.data.ErrorData;
 import com.gamify.interf.InterfaceAchievement;
 import com.gamify.model.Achievement;
 import com.gamify.model.App;
+import com.gamify.model.Error;
 import com.gamify.model.Input;
 
 public class AchievementManager implements InterfaceAchievement {
@@ -24,28 +27,51 @@ public class AchievementManager implements InterfaceAchievement {
 
 	// Create Achievement
 	@Override
-	public void createAchievement(String achievementID, String appID, String name, String structure, String reward,
-			String goal, String type, String description, String userAuth) {
+	public Response createAchievement(String appID, String name, String structure, String reward, String goal,
+			String type, String description, String userAuth) {
 
 		AppData appData = AppData.getInstance();
 		List<App> apps = appData.getAllData();
 
 		for (App app : apps) {
 			if (app.getUserID().equals(userAuth)) {
-				Input input = new Input("", "");
-				List<Input> inputs = new ArrayList<Input>();
-				inputs.add(input);
-				Achievement achievement = new Achievement(achievementID, appID, name, structure, reward, goal, type,
-						description, inputs);
 				AchievementData achievementData = AchievementData.getInstance();
-				achievementData.insertData(achievement);
-				break;
+				List<Achievement> achievements = achievementData.getData(appID);
+
+				boolean exists = false;
+				for (int i = 0; i < achievements.size(); i++) {
+					if (achievements.get(i).getName().equals(name)) {
+						exists = true;
+						break;
+					}
+				}
+
+				if (exists) {
+					ErrorData errorData = ErrorData.getInstance();
+					Error error = errorData.getData("14");
+					return Response.serverError().status(Integer.parseInt(error.getHttp_status())).type("text/plain")
+							.entity(error.getMessage()).build();
+				} else {
+					Input input = new Input("", "");
+					List<Input> inputs = new ArrayList<Input>();
+					inputs.add(input);
+					int newID = Integer.parseInt(
+							achievements.get(achievements.size() - 1).getAchievementID().replace("ach", "")) + 1;
+					String achievementID = "ach" + Integer.toString(newID);
+					Achievement achievement = new Achievement(achievementID, appID, name, structure, reward, goal, type,
+							description, inputs);
+					achievementData.insertData(achievement);
+					// The achievement is created with success
+					return Response.ok().entity("Achievement " + name + " created!").build();
+				}
+
 			} else {
 				// The user is not authorized to create achievements from another user
 				ErrorData errorData = ErrorData.getInstance();
 				errorData.getData("3");
 			}
 		}
+		return null;
 
 	}
 
@@ -66,12 +92,11 @@ public class AchievementManager implements InterfaceAchievement {
 			if (app.getAppID().equals(appID)) {
 
 				if (app.getUserID().equals(userAuth)) {
-
 					return achievementData.getData(appID);
 				} else {
 					// The user is not authorized to see achievements from another user
 					ErrorData errorData = ErrorData.getInstance();
-					errorData.getData("3");
+					return errorData.getData("3");
 				}
 
 			}

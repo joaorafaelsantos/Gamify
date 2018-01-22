@@ -32,15 +32,11 @@ public class UsersResource {
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
 	public Response createUser(@FormParam("userID") String userID, @FormParam("password") String password,
-			@FormParam("email") String email, @Context UriInfo uriInfo) {
+			@FormParam("email") String email) {
 
 		if (userID != null && password != null && email != null) {
 			UserManager um = UserManager.getInstance();
-			um.createUser(userID, password, email);
-
-			UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-			builder.path(userID);
-			return Response.created(builder.build()).build();
+			return um.createUser(userID, password, email);
 		} else {
 			// Invalid data
 			ErrorData errorData = ErrorData.getInstance();
@@ -59,7 +55,7 @@ public class UsersResource {
 		if (apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			UserManager um = UserManager.getInstance();
 			return um.getUsers(userAuth);
@@ -78,7 +74,7 @@ public class UsersResource {
 		if (userID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			UserManager um = UserManager.getInstance();
 			return um.getUser(userID, userAuth);
@@ -99,7 +95,7 @@ public class UsersResource {
 		if (userID != null && password != null && email != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			UserManager um = UserManager.getInstance();
 			um.changeUser(userID, password, email, userAuth);
@@ -119,7 +115,7 @@ public class UsersResource {
 		if (userID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			UserManager um = UserManager.getInstance();
 			return um.removeUser(userID, userAuth);

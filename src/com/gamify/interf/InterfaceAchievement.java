@@ -2,7 +2,7 @@ package com.gamify.interf;
 
 public interface InterfaceAchievement {
 
-	public void createAchievement(String achievementID, String appID, String name, String structure, String reward,
+	public Object createAchievement (String appID, String name, String structure, String reward,
 			String goal, String type, String description, String userAuth);
 
 	public Object getAchievements(String appID, String userAuth);

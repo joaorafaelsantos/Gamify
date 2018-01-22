@@ -3,13 +3,16 @@ package com.gamify.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gamify.data.AchievementData;
+import javax.ws.rs.core.Response;
+
+import com.gamify.data.LeaderboardData;
 import com.gamify.data.AppData;
 import com.gamify.data.ErrorData;
 import com.gamify.data.LeaderboardData;
 import com.gamify.interf.InterfaceLeaderboard;
-import com.gamify.model.Achievement;
+import com.gamify.model.Leaderboard;
 import com.gamify.model.App;
+import com.gamify.model.Error;
 import com.gamify.model.Input;
 import com.gamify.model.Leaderboard;
 
@@ -26,7 +29,7 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 
 	// Create Leaderboard
 	@Override
-	public void createLeaderboard(String leaderboardID, String appID, String name, String type, String description,
+	public Response createLeaderboard(String appID, String name, String type, String description,
 			String userAuth) {
 
 		AppData appData = AppData.getInstance();
@@ -34,19 +37,42 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 
 		for (App app : apps) {
 			if (app.getUserID().equals(userAuth)) {
-				Input input = new Input("", "");
-				List<Input> inputs = new ArrayList<Input>();
-				inputs.add(input);
-				Leaderboard leaderboard = new Leaderboard(leaderboardID, appID, name, type, description, inputs);
 				LeaderboardData leaderboardData = LeaderboardData.getInstance();
-				leaderboardData.insertData(leaderboard);
-				break;
+				List<Leaderboard> leaderboards = leaderboardData.getData(appID);
+
+				boolean exists = false;
+				for (int i = 0; i < leaderboards.size(); i++) {
+					if (leaderboards.get(i).getName().equals(name)) {
+						exists = true;
+						break;
+					}
+				}
+
+				if (exists) {
+					ErrorData errorData = ErrorData.getInstance();
+					Error error = errorData.getData("14");
+					return Response.serverError().status(Integer.parseInt(error.getHttp_status())).type("text/plain")
+							.entity(error.getMessage()).build();
+				} else {
+					Input input = new Input("", "");
+					List<Input> inputs = new ArrayList<Input>();
+					inputs.add(input);
+					int newID = Integer.parseInt(
+							leaderboards.get(leaderboards.size() - 1).getLeaderboardID().replace("lb", "")) + 1;
+					String leaderboardID = "lb" + Integer.toString(newID);
+					Leaderboard leaderboard = new Leaderboard(leaderboardID, appID, name, type, description, inputs);
+					leaderboardData.insertData(leaderboard);
+					// The leaderboard is created with success
+					return Response.ok().entity("Leaderboard " + name + " created!").build();
+				}
+
 			} else {
-				// The user is not authorized to create achievements from another user
+				// The user is not authorized to create leaderboards from another user
 				ErrorData errorData = ErrorData.getInstance();
 				errorData.getData("3");
 			}
 		}
+		return null;
 
 	}
 

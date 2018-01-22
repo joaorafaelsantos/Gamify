@@ -10,6 +10,7 @@ import com.gamify.data.ErrorData;
 import com.gamify.data.UserData;
 import com.gamify.interf.InterfaceUser;
 import com.gamify.model.App;
+import com.gamify.model.Error;
 import com.gamify.model.User;
 
 public class UserManager implements InterfaceUser {
@@ -26,13 +27,31 @@ public class UserManager implements InterfaceUser {
 	// Create new user
 
 	@Override
-	public Object createUser(String userID, String password, String email) {
-
-		User user = new User(userID, password, email);
+	public Response createUser(String userID, String password, String email) {
+	
 		UserData userData = UserData.getInstance();
-		userData.insertData(user);
-		// The user is created with success
-		return Response.ok().entity(userID + " created!").build();
+		List<User> users = userData.getData();
+
+		boolean exists = false;
+		for (int i = 0; i < users.size(); i++) {
+			if (users.get(i).getUserID().equals(userID)) {
+				exists = true;
+				break;
+			}
+		}
+
+		if (exists) {
+			ErrorData errorData = ErrorData.getInstance();
+			Error error = errorData.getData("1");
+			return Response.serverError().status(Integer.parseInt(error.getHttp_status())).type("text/plain")
+					.entity(error.getMessage()).build();
+		} else {
+			User user = new User(userID, password, email);
+			userData.insertData(user);
+			// The user is created with success
+			return Response.ok().entity(userID + " created!").build();
+		}
+
 	}
 
 	// Get all users
@@ -54,7 +73,7 @@ public class UserManager implements InterfaceUser {
 
 	@Override
 	public List<User> getUser(String userID, String userAuth) {
-		
+
 		if (userAuth != null) {
 			UserData userData = UserData.getInstance();
 			return userData.getData(userID);

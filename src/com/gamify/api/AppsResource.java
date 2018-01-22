@@ -29,22 +29,18 @@ public class AppsResource {
 	// Create new app
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
-	public Response createApp(@FormParam("appID") String appID, @FormParam("appName") String appName,
-			@FormParam("type") String type, @FormParam("description") String description,
-			@FormParam("apiKey") String apiKey, @Context UriInfo uriInfo) {
+	public Response createApp(@FormParam("appName") String appName, @FormParam("type") String type,
+			@FormParam("description") String description, @FormParam("apiKey") String apiKey) {
 
-		if (appID != null && appName != null && type != null && description != null && apiKey != null) {
+		if (appName != null && type != null && description != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			AppManager am = AppManager.getInstance();
 
-			am.createApp(appID, userAuth, appName, type, description, userAuth);
+			return am.createApp(userAuth, appName, type, description, userAuth);
 
-			UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-			builder.path(appID);
-			return Response.created(builder.build()).build();
 		} else {
 			// Invalid data
 			ErrorData errorData = ErrorData.getInstance();
@@ -62,7 +58,7 @@ public class AppsResource {
 		if (userID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			AppManager am = AppManager.getInstance();
 			return am.getApps(userID, userAuth);
@@ -84,7 +80,7 @@ public class AppsResource {
 		if (userID != null && appID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			AppManager am = AppManager.getInstance();
 			return am.getApp(userID, appID, userAuth);
@@ -107,7 +103,7 @@ public class AppsResource {
 		if (appID != null && appName != null && type != null && description != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			AppManager am = AppManager.getInstance();
 			am.changeApp(appID, appName, type, description, userAuth);
@@ -130,7 +126,7 @@ public class AppsResource {
 		if (appID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			AppManager am = AppManager.getInstance();
 			am.removeApp(appID, userAuth);

@@ -3,10 +3,15 @@ package com.gamify.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.core.Response;
+
 import com.gamify.data.AppData;
 import com.gamify.data.ErrorData;
+import com.gamify.data.UserData;
 import com.gamify.interf.InterfaceApp;
 import com.gamify.model.App;
+import com.gamify.model.Error;
+import com.gamify.model.User;
 
 public class AppManager implements InterfaceApp {
 
@@ -22,11 +27,33 @@ public class AppManager implements InterfaceApp {
 	// Create new app
 
 	@Override
-	public void createApp(String appID, String userID, String appName, String type, String description,
-			String userAuth) {
-		App app = new App(appID, userID, appName, type, description);
+	public Response createApp(String userID, String appName, String type, String description, String userAuth) {
+
 		AppData appData = AppData.getInstance();
-		appData.insertData(app);
+		List<App> apps = appData.getAllData();
+
+		boolean exists = false;
+		for (int i = 0; i < apps.size(); i++) {
+			if (apps.get(i).getAppName().equals(appName)) {
+				exists = true;
+				break;
+			}
+		}
+
+		if (exists) {
+			ErrorData errorData = ErrorData.getInstance();
+			Error error = errorData.getData("13");
+			return Response.serverError().status(Integer.parseInt(error.getHttp_status())).type("text/plain")
+					.entity(error.getMessage()).build();
+		} else {
+			int newID = Integer.parseInt(apps.get(apps.size() - 1).getAppID().replace("app", "")) + 1;
+			String appID = "app" + Integer.toString(newID);
+			App app = new App(appID, userID, appName, type, description);
+			appData.insertData(app);
+			// The user is created with success
+			return Response.ok().entity(appName + " created!").build();
+		}
+
 	}
 
 	// Get all apps

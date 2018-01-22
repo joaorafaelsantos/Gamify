@@ -33,21 +33,16 @@ public class LeaderboardsResource {
 	// Create new leaderboard
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
-	public Response createAchievement(@FormParam("leaderboardID") String leaderboardID,
-			@PathParam("appID") String appID, @FormParam("name") String name, @FormParam("type") String type,
-			@FormParam("description") String description, @FormParam("apiKey") String apiKey,
-			@Context UriInfo uriInfo) {
+	public Response createAchievement(@PathParam("appID") String appID, @FormParam("name") String name,
+			@FormParam("type") String type, @FormParam("description") String description,
+			@FormParam("apiKey") String apiKey, @Context UriInfo uriInfo) {
 
-		if (leaderboardID != null && appID != null && name != null && type != null && description != null
-				&& apiKey != null) {
+		if (appID != null && name != null && type != null && description != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 			LeaderboardManager lm = LeaderboardManager.getInstance();
-			lm.createLeaderboard(leaderboardID, appID, name, type, description, userAuth);
-			UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-			builder.path(leaderboardID);
-			return Response.created(builder.build()).build();
+			return lm.createLeaderboard(appID, name, type, description, userAuth);
 		} else {
 			// Invalid data
 			ErrorData errorData = ErrorData.getInstance();
@@ -66,7 +61,7 @@ public class LeaderboardsResource {
 		if (appID != null && appID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			LeaderboardManager lm = LeaderboardManager.getInstance();
 			return lm.getLeaderboards(appID, userAuth);
@@ -88,7 +83,7 @@ public class LeaderboardsResource {
 		if (appID != null && leaderboardID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			LeaderboardManager lm = LeaderboardManager.getInstance();
 			return lm.getLeaderboard(appID, leaderboardID, userAuth);
@@ -110,7 +105,7 @@ public class LeaderboardsResource {
 		if (appID != null && leaderboardID != null && name != null && score != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 			LeaderboardManager lm = LeaderboardManager.getInstance();
 			lm.addInputs(appID, leaderboardID, name, score, userAuth);
 			return Response.ok().entity("Inputs added!").build();
@@ -135,7 +130,7 @@ public class LeaderboardsResource {
 				&& apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			LeaderboardManager lm = LeaderboardManager.getInstance();
 			lm.changeLeaderboard(appID, leaderboardID, name, type, description, userAuth);
@@ -158,7 +153,7 @@ public class LeaderboardsResource {
 		if (appID != null && leaderboardID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			LeaderboardManager lm = LeaderboardManager.getInstance();
 			lm.removeLeaderboard(appID, leaderboardID, userAuth);
@@ -183,7 +178,7 @@ public class LeaderboardsResource {
 		if (appID != null && leaderboardID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			LeaderboardManager lm = LeaderboardManager.getInstance();
 			lm.resetLeaderboardScore(appID, leaderboardID, userAuth);
@@ -205,7 +200,7 @@ public class LeaderboardsResource {
 		if (appID != null && leaderboardID != null && apiKey != null) {
 			AuthManager authManager = AuthManager.getInstance();
 			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-			String userAuth = claims.get("username").toString();
+			String userAuth = claims.get("userID").toString();
 
 			LeaderboardManager lm = LeaderboardManager.getInstance();
 			lm.resetLeaderboardTotal(appID, leaderboardID, userAuth);
