@@ -18,10 +18,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import com.gamify.data.ErrorData;
 import com.gamify.impl.AchievementManager;
 import com.gamify.impl.AuthManager;
 import com.gamify.model.Achievement;
 import com.gamify.model.App;
+import com.gamify.model.Error;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -38,17 +40,27 @@ public class AchievementsResource {
 			@FormParam("description") String description, @FormParam("apiKey") String apiKey,
 			@Context UriInfo uriInfo) {
 
-		AuthManager authManager = AuthManager.getInstance();
-		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-		String userAuth = claims.get("username").toString();
+		if (achievementID != null && appID != null && name != null && structure != null && reward != null
+				&& goal != null && type != null && description != null && apiKey != null) {
+			AuthManager authManager = AuthManager.getInstance();
+			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+			String userAuth = claims.get("username").toString();
 
-		AchievementManager am = AchievementManager.getInstance();
+			AchievementManager am = AchievementManager.getInstance();
 
-		am.createAchievement(achievementID, appID, name, structure, reward, goal, type, description, userAuth);
+			am.createAchievement(achievementID, appID, name, structure, reward, goal, type, description, userAuth);
 
-		UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-		builder.path(achievementID);
-		return Response.created(builder.build()).build();
+			UriBuilder builder = uriInfo.getAbsolutePathBuilder();
+			builder.path(achievementID);
+			return Response.created(builder.build()).build();
+		} else {
+			// Invalid data
+			ErrorData errorData = ErrorData.getInstance();
+			Error error = errorData.getData("12");
+			return Response.serverError().status(Integer.parseInt(error.getHttp_status())).type("text/plain")
+					.entity(error.getMessage()).build();
+		}
+
 	}
 
 	// Get all achievements
@@ -56,12 +68,19 @@ public class AchievementsResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Object getAchievements(@PathParam("appID") String appID, @QueryParam("apiKey") String apiKey) {
 
-		AuthManager authManager = AuthManager.getInstance();
-		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-		String userAuth = claims.get("username").toString();
+		if (appID != null && apiKey != null) {
+			AuthManager authManager = AuthManager.getInstance();
+			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+			String userAuth = claims.get("username").toString();
 
-		AchievementManager am = AchievementManager.getInstance();
-		return am.getAchievements(appID, userAuth);
+			AchievementManager am = AchievementManager.getInstance();
+			return am.getAchievements(appID, userAuth);
+		} else {
+			// Invalid data
+			ErrorData errorData = ErrorData.getInstance();
+			return errorData.getData("12");
+		}
+
 	}
 
 	// GET a specific achievement
@@ -71,28 +90,42 @@ public class AchievementsResource {
 	public Object getAchievement(@PathParam("appID") String appID, @PathParam("achievementID") String achievementID,
 			@QueryParam("apiKey") String apiKey) {
 
-		AuthManager authManager = AuthManager.getInstance();
-		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-		String userAuth = claims.get("username").toString();
+		if (appID != null && achievementID != null && apiKey != null) {
+			AuthManager authManager = AuthManager.getInstance();
+			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+			String userAuth = claims.get("username").toString();
 
-		AchievementManager am = AchievementManager.getInstance();
-		return am.getAchievement(appID, achievementID, userAuth);
+			AchievementManager am = AchievementManager.getInstance();
+			return am.getAchievement(appID, achievementID, userAuth);
+		} else {
+			// Invalid data
+			ErrorData errorData = ErrorData.getInstance();
+			return errorData.getData("12");
+		}
+
 	}
 
 	// Add Inputs to achievement
 	@Path("/{achievementID}")
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
-	public Response addInputs(@PathParam("appID") String appID, @PathParam("achievementID") String achievementID,
+	public Object addInputs(@PathParam("appID") String appID, @PathParam("achievementID") String achievementID,
 			@FormParam("name") String name, @FormParam("score") String score, @FormParam("apiKey") String apiKey) {
 
-		AuthManager authManager = AuthManager.getInstance();
-		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-		String userAuth = claims.get("username").toString();
+		if (appID != null && achievementID != null && name != null && score != null && apiKey != null) {
+			AuthManager authManager = AuthManager.getInstance();
+			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+			String userAuth = claims.get("username").toString();
 
-		AchievementManager am = AchievementManager.getInstance();
-		am.addInputs(appID, achievementID, name, score, userAuth);
-		return Response.ok().entity("").build();
+			AchievementManager am = AchievementManager.getInstance();
+			am.addInputs(appID, achievementID, name, score, userAuth);
+			return Response.ok().entity("Inputs added!").build();
+		} else {
+			// Invalid data
+			ErrorData errorData = ErrorData.getInstance();
+			return errorData.getData("12");
+		}
+
 	}
 
 	// Change a specific achievement
@@ -100,35 +133,50 @@ public class AchievementsResource {
 	@PUT
 	@Consumes("application/x-www-form-urlencoded")
 
-	public Response changeAchievement(@PathParam("appID") String appID,
-			@PathParam("achievementID") String achievementID, @FormParam("name") String name,
-			@FormParam("reward") String reward, @FormParam("goal") String goal, @FormParam("type") String type,
-			@FormParam("description") String description, @FormParam("apiKey") String apiKey) {
+	public Object changeAchievement(@PathParam("appID") String appID, @PathParam("achievementID") String achievementID,
+			@FormParam("name") String name, @FormParam("reward") String reward, @FormParam("goal") String goal,
+			@FormParam("type") String type, @FormParam("description") String description,
+			@FormParam("apiKey") String apiKey) {
 
-		AuthManager authManager = AuthManager.getInstance();
-		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-		String userAuth = claims.get("username").toString();
+		if (appID != null && achievementID != null && name != null && reward != null && goal != null && type != null
+				&& description != null && apiKey != null) {
+			AuthManager authManager = AuthManager.getInstance();
+			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+			String userAuth = claims.get("username").toString();
 
-		AchievementManager am = AchievementManager.getInstance();
-		am.changeAchievement(appID, achievementID, name, reward, goal, type, description, userAuth);
+			AchievementManager am = AchievementManager.getInstance();
+			am.changeAchievement(appID, achievementID, name, reward, goal, type, description, userAuth);
 
-		return Response.ok().entity("").build(); // Send response * TO DO *
+			return Response.ok().entity("Achievement changed!").build();
+		} else {
+			// Invalid data
+			ErrorData errorData = ErrorData.getInstance();
+			return errorData.getData("12");
+		}
+
 	}
 
 	// DELETE a specific achievement
 	@Path("/{achievementID}")
 	@DELETE
-	public Response removeAchievement(@PathParam("appID") String appID,
-			@PathParam("achievementID") String achievementID, @QueryParam("apiKey") String apiKey) {
+	public Object removeAchievement(@PathParam("appID") String appID, @PathParam("achievementID") String achievementID,
+			@FormParam("apiKey") String apiKey) {
 
-		AuthManager authManager = AuthManager.getInstance();
-		Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
-		String userAuth = claims.get("username").toString();
+		if (appID != null && achievementID != null && apiKey != null) {
+			AuthManager authManager = AuthManager.getInstance();
+			Claims claims = Jwts.parser().setSigningKey(authManager.getKey()).parseClaimsJws(apiKey).getBody();
+			String userAuth = claims.get("username").toString();
 
-		AchievementManager am = AchievementManager.getInstance();
-		am.removeAchievement(appID, achievementID, userAuth);
+			AchievementManager am = AchievementManager.getInstance();
+			am.removeAchievement(appID, achievementID, userAuth);
 
-		return Response.ok().entity("").build(); // Send response * TO DO *
+			return Response.ok().entity("Achievement deleted!").build();
+		} else {
+			// Invalid data
+			ErrorData errorData = ErrorData.getInstance();
+			return errorData.getData("12");
+		}
+
 	}
 
 }

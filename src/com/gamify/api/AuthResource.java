@@ -20,34 +20,44 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Path("/auth")
 public class AuthResource {
 
-	// POST auth)
+	// POST auth
 	@POST
 	@Consumes("application/x-www-form-urlencoded")
 
 	public Response auth(@FormParam("username") String username, @FormParam("password") String password) {
-		AuthManager am = AuthManager.getInstance();
-		boolean validate;
-		
-		// Validate user data in db store
 
-		validate = am.getAuth(username, password);
+		if (username != null && password != null) {
+			AuthManager am = AuthManager.getInstance();
+			boolean validate;
 
-		if (validate) {
+			// Validate user data in db store
 
-			// Create user data
-			Map<String, Object> user = new HashMap<String, Object>();
-			user.put("username", username);
+			validate = am.getAuth(username, password);
 
-			// Create JWT token
-			String newToken = Jwts.builder().setClaims(user).setSubject(username).setIssuer("Gamify")
-					.signWith(SignatureAlgorithm.HS256, am.getKey()).compact();
+			if (validate) {
 
-			// Send token to the client
-			return Response.ok().entity(newToken).build();
+				// Create user data
+				Map<String, Object> user = new HashMap<String, Object>();
+				user.put("username", username);
+
+				// Create JWT token
+				String newToken = Jwts.builder().setClaims(user).setSubject(username).setIssuer("Gamify")
+						.signWith(SignatureAlgorithm.HS256, am.getKey()).compact();
+
+				// Send token to the client
+				Object obj = newToken;
+				return Response.ok().entity(newToken).build();
+			} else {
+				// Invalid user
+				ErrorData errorData = ErrorData.getInstance();
+				Error error = errorData.getData("5");
+				return Response.serverError().status(Integer.parseInt(error.getHttp_status())).type("text/plain")
+						.entity(error.getMessage()).build();
+			}
 		} else {
-			// Invalid user
+			// Invalid data
 			ErrorData errorData = ErrorData.getInstance();
-			Error error = errorData.getData("5");
+			Error error = errorData.getData("12");
 			return Response.serverError().status(Integer.parseInt(error.getHttp_status())).type("text/plain")
 					.entity(error.getMessage()).build();
 		}
