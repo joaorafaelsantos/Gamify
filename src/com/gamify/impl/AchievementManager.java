@@ -52,12 +52,20 @@ public class AchievementManager implements InterfaceAchievement {
 					return Response.serverError().status(Integer.parseInt(error.getHttp_status())).type("text/plain")
 							.entity(error.getMessage()).build();
 				} else {
+					String achievementID = "";
 					Input input = new Input("", "");
 					List<Input> inputs = new ArrayList<Input>();
 					inputs.add(input);
-					int newID = Integer.parseInt(
-							achievements.get(achievements.size() - 1).getAchievementID().replace("ach", "")) + 1;
-					String achievementID = "ach" + Integer.toString(newID);
+					if (achievements.size() > 0) {
+						int newID = Integer.parseInt(
+								achievements.get(achievements.size() - 1).getAchievementID().replace("ach", "")) + 1;
+						achievementID = "ach" + Integer.toString(newID);
+					}
+					else {
+						int newID = 1;
+						achievementID = "ach" + Integer.toString(newID);
+					}
+					
 					Achievement achievement = new Achievement(achievementID, appID, name, structure, reward, goal, type,
 							description, inputs);
 					achievementData.insertData(achievement);

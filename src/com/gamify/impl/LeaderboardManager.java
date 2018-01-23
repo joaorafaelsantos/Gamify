@@ -29,8 +29,7 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 
 	// Create Leaderboard
 	@Override
-	public Response createLeaderboard(String appID, String name, String type, String description,
-			String userAuth) {
+	public Response createLeaderboard(String appID, String name, String type, String description, String userAuth) {
 
 		AppData appData = AppData.getInstance();
 		List<App> apps = appData.getAllData();
@@ -54,12 +53,19 @@ public class LeaderboardManager implements InterfaceLeaderboard {
 					return Response.serverError().status(Integer.parseInt(error.getHttp_status())).type("text/plain")
 							.entity(error.getMessage()).build();
 				} else {
+					String leaderboardID = "";
 					Input input = new Input("", "");
 					List<Input> inputs = new ArrayList<Input>();
 					inputs.add(input);
-					int newID = Integer.parseInt(
-							leaderboards.get(leaderboards.size() - 1).getLeaderboardID().replace("lb", "")) + 1;
-					String leaderboardID = "lb" + Integer.toString(newID);
+					if (leaderboards.size() > 0) {
+						int newID = Integer.parseInt(
+								leaderboards.get(leaderboards.size() - 1).getLeaderboardID().replace("lb", "")) + 1;
+						leaderboardID = "lb" + Integer.toString(newID);
+					} else {
+						int newID = 1;
+						leaderboardID = "lb" + Integer.toString(newID);
+					}
+
 					Leaderboard leaderboard = new Leaderboard(leaderboardID, appID, name, type, description, inputs);
 					leaderboardData.insertData(leaderboard);
 					// The leaderboard is created with success
