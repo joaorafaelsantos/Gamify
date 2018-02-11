@@ -7,7 +7,7 @@
     Gamification Web Service
     <br>
     <br>
-    <a href="">Link</a>
+    <a href="http://trabalhos.esmad.ipp.pt:8080/Gamify/">Link</a>
     <br>
     <br>
     Web Information Systems and Technologies / School of Media Arts and Design (P.PORTO)
