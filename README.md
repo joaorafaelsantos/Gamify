@@ -12,7 +12,7 @@
     <br>
     Web Information Systems and Technologies / School of Media Arts and Design (P.PORTO)
     <br>
-    Grade: ?/20
+    Grade: 18/20
     <br>
   </p>
 </p>
