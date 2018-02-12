@@ -14,5 +14,10 @@
     <br>
     Grade: 18/20
     <br>
+  <br>
+  <img src="https://github.com/joaorafaelsantos/Gamify/blob/master/pic1.png?raw=true" width=400>
+       <img src="https://github.com/joaorafaelsantos/Gamify/blob/master/pic2.png?raw=true" width=400>
+  <img src="https://github.com/joaorafaelsantos/Gamify/blob/master/pic3.png?raw=true" width=400>
+       <img src="https://github.com/joaorafaelsantos/Gamify/blob/master/pic4.png?raw=true" width=400>
   </p>
 </p>
