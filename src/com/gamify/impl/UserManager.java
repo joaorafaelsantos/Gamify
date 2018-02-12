@@ -32,20 +32,28 @@ public class UserManager implements InterfaceUser {
 		UserData userData = UserData.getInstance();
 		List<User> users = userData.getData();
 
-		boolean exists = false;
-		for (int i = 0; i < users.size(); i++) {
-			if (users.get(i).getUserID().equals(userID)) {
-				exists = true;
-				break;
+		if (users.size() > 0 ) {
+			boolean exists = false;
+			for (int i = 0; i < users.size(); i++) {
+				if (users.get(i).getUserID().equals(userID)) {
+					exists = true;
+					break;
+				}
+			}
+
+			if (exists) {
+				ErrorData errorData = ErrorData.getInstance();
+				Error error = errorData.getData("1");
+				return Response.serverError().status(Integer.parseInt(error.getHttp_status())).type("text/plain")
+						.entity(error.getMessage()).build();
+			} else {
+				User user = new User(userID, password, email);
+				userData.insertData(user);
+				// The user is created with success
+				return Response.ok().entity(userID + " created!").build();
 			}
 		}
-
-		if (exists) {
-			ErrorData errorData = ErrorData.getInstance();
-			Error error = errorData.getData("1");
-			return Response.serverError().status(Integer.parseInt(error.getHttp_status())).type("text/plain")
-					.entity(error.getMessage()).build();
-		} else {
+		else {
 			User user = new User(userID, password, email);
 			userData.insertData(user);
 			// The user is created with success
